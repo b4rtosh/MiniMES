@@ -1,4 +1,6 @@
 
+using Microsoft.EntityFrameworkCore;
+
 namespace MiniMesTrainApi
 {
     public class Program
@@ -13,6 +15,16 @@ namespace MiniMesTrainApi
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            string? connString = builder.Configuration.GetConnectionString("MiniProduction");
+            if (connString == null)
+            {
+                Console.WriteLine("There is no ConnectionString called MiniProduction in appsettinds.json");
+            }
+            else
+            {
+                builder.Services.AddDbContext<MiniProductionDbContext>(options => options.UseSqlServer(connString));
+            }
 
             var app = builder.Build();
 
