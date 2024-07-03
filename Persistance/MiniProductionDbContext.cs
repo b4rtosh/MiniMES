@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using MiniMesTrainApi.Models;
 
 public class MiniProductionDbContext : DbContext
 {
@@ -50,8 +51,8 @@ public class MiniProductionDbContext : DbContext
             entity.HasOne(d => d.Order)
                 .WithMany(p => p.Processes)
                 .HasForeignKey(d => d.OrderId);
-            entity.Property(e => e.Status);
-            entity.Property(e => e.DateTime);
+            entity.Property(e => e.StatusId);
+            entity.Property(e => e.CreatedTime);
         });
 
         modelBuilder.Entity<Parameter>(entity =>

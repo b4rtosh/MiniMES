@@ -1,5 +1,8 @@
-
+using MiniMesTrainApi.Repositories;
+using MiniMesTrainApi;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using MiniMesTrainApi.Models;
 
 namespace MiniMesTrainApi.Controllers
 {
@@ -8,11 +11,15 @@ namespace MiniMesTrainApi.Controllers
     public class MachineController : Controller
     {
         [HttpGet]
-        [Route ("all")]
-        public IActionResult ListOfMachines()
+        [Route ("add")]
+        public IActionResult AddMachine()
         {
-            return Ok("Works");
+            MachinesRepo machinesRepo = new MachinesRepo(
+            //machineRepo.CreateNew("Machine 1", "This is machine 1");
+            return Ok();
         }
+        
+        
 
     }
     

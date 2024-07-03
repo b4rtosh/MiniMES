@@ -1,8 +1,10 @@
-public class Product
+namespace MiniMesTrainApi.Models
 {
-    public int Id { get; private set; }
-    public string Name { get; private set; } = "";
-    public string? Description { get; private set; }
-
-    public ICollection<Order> Orders { get; private set; } = null!;
+    public class Product
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = "";
+        public string? Description { get; set; }
+        public ICollection<Order> Orders { get; set; } = null!;
+    }
 }

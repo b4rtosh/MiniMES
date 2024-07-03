@@ -1,11 +1,19 @@
-public class Process
-{
-	public int Id { get; private set; }
-	public string SerialNumber { get; private set; } = "";
-	public long OrderId { get; private set; }
-	public Order Order { get; private set; } = null!;
-	public string Status { get; private set; } = ""; // check it
-	public DateTime DateTime { get; } = DateTime.Now;
+using Microsoft.EntityFrameworkCore;
 
-	public ICollection<ProcessParameter> ProcessParameters { get; private set; } = null!;
+namespace MiniMesTrainApi.Models
+{
+
+	public class Process
+	{
+		public int Id { get; set; }
+		public string SerialNumber { get; set; } = "";
+		public long OrderId { get; set; }
+		public Order Order { get; set; } = null!;
+		public int StatusId { get; set; } // check it
+
+		public ProcessStatus ProcessStatus { get; set; } = null!;
+		public DateTime CreatedTime { get; } = DateTime.Now;
+
+		public ICollection<ProcessParameter> ProcessParameters { get; set; } = null!;
+	}
 }
