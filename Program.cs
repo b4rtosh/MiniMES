@@ -19,7 +19,7 @@ namespace MiniMesTrainApi
             string? connString = builder.Configuration.GetConnectionString("MiniProduction");
             if (connString == null)
             {
-                Console.WriteLine("There is no ConnectionString called MiniProduction in appsettinds.json");
+                Console.WriteLine("There is no ConnectionString called MiniProduction in appsettings.json");
             }
             else
             {

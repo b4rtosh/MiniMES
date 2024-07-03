@@ -14,7 +14,7 @@ namespace MiniMesTrainApi.Controllers
         [Route ("add")]
         public IActionResult AddMachine()
         {
-            MachinesRepo machinesRepo = new MachinesRepo(
+            MachinesRepo machinesRepo = new MachinesRepo();
             //machineRepo.CreateNew("Machine 1", "This is machine 1");
             return Ok();
         }
