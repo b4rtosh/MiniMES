@@ -4,35 +4,32 @@ using MiniMesTrainApi.Repositories;
 
 namespace MiniMesTrainApi.Controllers;
 
-// [ApiController]
-[Route("api/v1/machine")]
-public class MachineController : Controller
+[Route("api/v1/status")]
+public class ProcessStatusController : Controller
 {
-    private readonly DatabaseRepo<Machine> _repo;
+    private readonly DatabaseRepo<ProcessStatus> _repo;
 
-    public MachineController(DatabaseRepo<Machine> repo)
+    public ProcessStatusController(DatabaseRepo<ProcessStatus> repo)
     {
         _repo = repo;
     }
 
     [HttpPut]
     [Route("add")]
-    public IActionResult Add([FromQuery] Machine machine)
+    public IActionResult Add([FromQuery] ProcessStatus status)
     {
         try
         {
-            if (machine.Name == "") throw new Exception("Name is required");
-            if (!Validation.CheckString(machine.Name)) throw new Exception("Name is invalid");
-            if (machine.Description == null) throw new Exception("Description is required");
-            if (!Validation.CheckString(machine.Description)) throw new Exception("Description is invalid");
+            if (status.Name == "") throw new Exception("Name is required");
+            if (!Validation.CheckString(status.Name)) throw new Exception("Name is invalid");
         }
         catch (Exception ex)
         {
             return BadRequest(ex.Message);
         }
 
-        _repo.CreateNew(machine);
-        return Ok("Machine added");
+        _repo.CreateNew(status);
+        return Ok("Status added");
     }
 
 
@@ -40,8 +37,8 @@ public class MachineController : Controller
     [Route("all")]
     public IActionResult GetAll()
     {
-        var machines = _repo.GetAll();
-        return Ok(machines);
+        var statuses = _repo.GetAll();
+        return Ok(statuses);
     }
 
     [HttpGet]
@@ -52,8 +49,8 @@ public class MachineController : Controller
         if (Validation.CheckInteger(idStr))
             id = Convert.ToInt32(idStr);
         else return BadRequest("Id is not an integer.");
-        var machine = _repo.GetById(id);
-        return Ok(machine);
+        var status = _repo.GetById(id);
+        return Ok(status);
     }
 
     [HttpDelete]
@@ -66,12 +63,12 @@ public class MachineController : Controller
         else return BadRequest("Id is not an integer.");
 
         _repo.DelById(id);
-        return Ok("Deleted machine");
+        return Ok("Deleted status");
     }
 
     [HttpPost]
     [Route("update")]
-    public IActionResult UpdateOne([FromQuery] string idStr, [FromQuery] Machine updated)
+    public IActionResult UpdateOne([FromQuery] string idStr, [FromQuery] ProcessStatus updated)
     {
         int id;
         if (Validation.CheckInteger(idStr))
@@ -85,13 +82,6 @@ public class MachineController : Controller
                 if (Validation.CheckString(updated.Name))
                     saved.Name = updated.Name;
                 else throw new Exception("Provided name was invalid");
-            }
-
-            if (updated.Description != null)
-            {
-                if (Validation.CheckString(updated.Description))
-                    saved.Description = updated.Description;
-                else throw new Exception("Provided description was invalid");
             }
         }
         catch (Exception e)
