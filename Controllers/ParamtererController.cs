@@ -44,7 +44,7 @@ public class ParamController : Controller
     }
 
     [HttpGet]
-    [Route("{id}")]
+    [Route("{idStr}")]
     public IActionResult GetOne([FromRoute] string idStr)
     {
         int id;

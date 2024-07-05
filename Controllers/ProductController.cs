@@ -20,8 +20,8 @@ public class ProductController : Controller
     {
         try
         {
-            if (product.Code == "") throw new Exception("Name is required");
-            if (!Validation.CheckString(product.Code)) throw new Exception("Name is invalid");
+            if (product.Code == "") throw new Exception("Code is required");
+            if (!Validation.CheckStringNoSpaces(product.Code)) throw new Exception("Name is invalid");
             if (product.Description == null) throw new Exception("Description is required");
             if (!Validation.CheckString(product.Description)) throw new Exception("Description is invalid");
         }

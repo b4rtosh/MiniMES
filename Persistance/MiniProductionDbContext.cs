@@ -32,8 +32,9 @@ public class MiniProductionDbContext : DbContext
         {
             entity.ToTable("Product", "MiniMes");
             entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.Description).HasMaxLength(50);
             entity.Property(e => e.Code).HasMaxLength(50);
+            entity.Property(e => e.Description).HasMaxLength(100);
+           
         });
         modelBuilder.Entity<Order>(entity =>
         {

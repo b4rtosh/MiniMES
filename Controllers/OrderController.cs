@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MiniMesTrainApi.Models;
 using MiniMesTrainApi.Repositories;
 
@@ -43,15 +44,14 @@ public class OrderController : Controller
     }
 
     [HttpGet]
-    [Route("{id}")]
-    public IActionResult GetOne([FromRoute] string idStr)
+    [Route("{idStr}")]
+    public async Task<IActionResult> GetOne([FromRoute] string idStr)
     {
         int id;
         if (Validation.CheckInteger(idStr))
             id = Convert.ToInt32(idStr);
         else return BadRequest("Id is not an integer.");
-
-        var order = _repo.GetById(id);
+        var order =  await _repo.GetByIdWithIncludes(x => x.Id == id, query => query.Include(x => x.Machine));
         return Ok(order);
     }
 

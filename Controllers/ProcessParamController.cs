@@ -32,7 +32,7 @@ public class ProcessParamController : Controller
     }
 
     [HttpGet]
-    [Route("{id}")]
+    [Route("{idStr}")]
     public IActionResult GetOne([FromRoute] string idStr)
     {
         int id;
