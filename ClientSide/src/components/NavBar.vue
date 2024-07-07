@@ -15,11 +15,11 @@
 <template>
   <nav class="navbar">
     <ul class="navbar-nav">
-      <li class="nav-item">
-        <a href="/" class="nav-link">{{ first }}</a>
+      <li class="nav-item" v-bind:id="firstItem" >
+        <a href="/machines" class="nav-link">{{ first }}</a>
       </li>
-      <li class="nav-item">
-        <a href="/about" class="nav-link">{{ second }}</a>
+      <li class="nav-item" >
+        <a href="/about" class="nav-link" >{{ second }}</a>
       </li>
       <li class="nav-item">
         <a href="/services" class="nav-link">{{third}}</a>
@@ -41,13 +41,13 @@
 
 .navbar-nav {
   list-style: none;
-  padding: 0;
+  padding: 10px;
   margin: 0;
   display: flex;
 }
 
 .nav-item {
-  margin: 0 10px;
+  margin: 0 20px;
 }
 
 .nav-link {
