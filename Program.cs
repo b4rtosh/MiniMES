@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MiniMesTrainApi.Models;
 using MiniMesTrainApi.Repositories;
@@ -10,6 +11,15 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowSpecificOrigin",
+                builder => builder.WithOrigins("http://localhost:5174")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowAnyOrigin());
+        });
+        
         // Add services to the container.
 
         builder.Services.AddControllers();
@@ -18,7 +28,8 @@ public class Program
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
-
+        
+        
         var connString = builder.Configuration.GetConnectionString("MiniProduction");
         if (connString == null)
         {
@@ -37,9 +48,12 @@ public class Program
             builder.Services.AddScoped<DatabaseRepo<Product>>();
             builder.Services.AddControllersWithViews();
         }
-
+        
+        
+       
         var app = builder.Build();
 
+        app.UseCors("AllowSpecificOrigin");
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
@@ -47,11 +61,12 @@ public class Program
             app.UseSwaggerUI();
         }
 
+        
         app.UseAuthorization();
-
-
+        app.UseCors();
+     
         app.MapControllers();
-
+        
         app.Run();
     }
 }

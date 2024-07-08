@@ -1,0 +1,9 @@
+/* GlobalStyles.css */
+
+h1 {
+    font-size: 24px; /* Example font size */
+    color: #333; /* Dark grey color */
+    text-align: center; /* Center align text */
+    margin-top: 20px; /* Top margin */
+    margin-bottom: 20px; /* Bottom margin */
+}

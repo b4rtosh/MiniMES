@@ -4,7 +4,7 @@ using MiniMesTrainApi.Repositories;
 
 namespace MiniMesTrainApi.Controllers;
 
-[Route("api/v1/param")]
+[Route("parameter")]
 public class ParamController : Controller
 {
     private readonly DatabaseRepo<Parameter> _repo;
@@ -70,13 +70,13 @@ public class ParamController : Controller
 
     [HttpPost]
     [Route("update")]
-    public IActionResult UpdateOne([FromQuery] string idStr, [FromQuery] Parameter updated)
+    public async Task<IActionResult> UpdateOne([FromQuery] string idStr, [FromQuery] Parameter updated)
     {
         int id;
         if (Validation.CheckInteger(idStr))
             id = Convert.ToInt32(idStr);
         else return BadRequest("Id is not an integer.");
-        var saved = _repo.GetById(id);
+        var saved = await _repo.GetById(id);
         try
         {
             if (updated.Name != "")

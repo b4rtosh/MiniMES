@@ -20,22 +20,23 @@ namespace MiniMesTrainApi.Repositories
             return _context;
         }
 
-        public void CreateNew(TEntity entity)
+        public async Task CreateNew (TEntity entity)
         {
-            _dbset.Add(entity);
-            _context.SaveChanges();
+            await _dbset.AddAsync(entity);
+            await _context.SaveChangesAsync();
         }
 
-        public TEntity? GetById(int id)
+        public async Task<TEntity?> GetById(int id)
         {
-            return _dbset.Find(id);
+            return await _dbset.FindAsync(id);
         }
 
 
-        public List<TEntity> GetAll()
+        public async Task<List<TEntity>> GetAll()
         {
-            return _dbset.ToList();
-        }
+            return await _dbset.ToListAsync();
+        }   
+
 
         public async Task<TEntity> GetByIdWithIncludes(
             Expression<Func<TEntity, bool>>? conditions = null,
@@ -75,17 +76,17 @@ namespace MiniMesTrainApi.Repositories
         //     return await query.SingleOrDefaultAsync(e => EF.Property<int>(e, "Id") == id);
         // }
 
-        public void DelById(int id)
+        public async  void DelById(int id)
         {
-            _dbset.Remove(GetById(id));
-            _context.SaveChanges();
+            _dbset.Remove(await GetById(id));
+            await _context.SaveChangesAsync();
         }
 
 
-        public void Update(TEntity entity)
+        public async void Update(TEntity entity)
         {
             _dbset.Update(entity);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
         public List<int> GetAllIds()

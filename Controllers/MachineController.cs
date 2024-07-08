@@ -5,7 +5,7 @@ using MiniMesTrainApi.Repositories;
 namespace MiniMesTrainApi.Controllers;
 
 // [ApiController]
-[Route("api/v1/machine")]
+[Route("/api/machine/")]
 public class MachineController : Controller
 {
     private readonly DatabaseRepo<Machine> _repo;
@@ -17,7 +17,7 @@ public class MachineController : Controller
 
     [HttpPut]
     [Route("add")]
-    public IActionResult Add([FromQuery] Machine machine)
+    public async Task<IActionResult> Add([FromBody] Machine machine)
     {
         try
         {
@@ -31,28 +31,24 @@ public class MachineController : Controller
             return BadRequest(ex.Message);
         }
 
-        _repo.CreateNew(machine);
-        return Ok("Machine added");
+        await _repo.CreateNew(machine);
+        return Ok("Added machine");
     }
-
 
     [HttpGet]
     [Route("all")]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAll()
     {
-        var machines = _repo.GetAll();
+        var machines = await _repo.GetAll();
         return Ok(machines);
     }
 
+
     [HttpGet]
-    [Route("{idStr}")]
-    public IActionResult GetOne([FromRoute] string idStr)
+    [Route("{id}")]
+    public async Task<IActionResult> GetOne([FromRoute] int id)
     {
-        int id;
-        if (Validation.CheckInteger(idStr))
-            id = Convert.ToInt32(idStr);
-        else return BadRequest("Id is not an integer.");
-        var machine = _repo.GetById(id);
+        var machine = await _repo.GetById(id);
         return Ok(machine);
     }
 
@@ -71,13 +67,13 @@ public class MachineController : Controller
 
     [HttpPost]
     [Route("update")]
-    public IActionResult UpdateOne([FromQuery] string idStr, [FromQuery] Machine updated)
+    public async Task<IActionResult> UpdateOne([FromQuery] string idStr, [FromQuery] Machine updated)
     {
         int id;
         if (Validation.CheckInteger(idStr))
             id = Convert.ToInt32(idStr);
         else return BadRequest("Id is not an integer.");
-        var saved = _repo.GetById(id);
+        var saved = await _repo.GetById(id);
         try
         {
             if (updated.Name != "")

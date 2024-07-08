@@ -2,10 +2,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MiniMesTrainApi.Models;
 using MiniMesTrainApi.Repositories;
+using static MiniMesTrainApi.Models.Validation;
 
 namespace MiniMesTrainApi.Controllers;
 
-[Route("api/v1/order")]
+[Route("order")]
 public class OrderController : Controller
 {
     private readonly DatabaseRepo<Order> _repo;
@@ -22,7 +23,7 @@ public class OrderController : Controller
         try
         {
             if (order.Code == "") throw new Exception("Code is required");
-            if (!Validation.CheckStringNoSpaces(order.Code)) throw new Exception("Code is invalid");
+            if (!CheckStringNoSpaces(order.Code)) throw new Exception("Code is invalid");
             // how to validate machine id and product id and quantity
         }
         catch (Exception ex)
@@ -48,7 +49,7 @@ public class OrderController : Controller
     public async Task<IActionResult> GetOne([FromRoute] string idStr)
     {
         int id;
-        if (Validation.CheckInteger(idStr))
+        if (CheckInteger(idStr))
             id = Convert.ToInt32(idStr);
         else return BadRequest("Id is not an integer.");
         var order =  await _repo.GetByIdWithIncludes(x => x.Id == id, query => query.Include(x => x.Machine));
@@ -60,7 +61,7 @@ public class OrderController : Controller
     public IActionResult DeleteOne([FromQuery] string idStr)
     {
         int id;
-        if (Validation.CheckInteger(idStr))
+        if (CheckInteger(idStr))
             id = Convert.ToInt32(idStr);
         else return BadRequest("Id is not an integer.");
 
@@ -70,19 +71,19 @@ public class OrderController : Controller
 
     [HttpPost]
     [Route("update")]
-    public IActionResult UpdateOne([FromQuery] string idStr, [FromQuery] Order updated)
+    public async Task<IActionResult> UpdateOne([FromQuery] string idStr, [FromQuery] Order updated)
     {
         int id;
-        if (Validation.CheckInteger(idStr))
+        if (CheckInteger(idStr))
             id = Convert.ToInt32(idStr);
         else return BadRequest("Id is not an integer.");
 
-        var saved = _repo.GetById(id);
+        var saved = await _repo.GetById(id);
         try
         {
             if (updated.Code != "")
             {
-                if (Validation.CheckString(updated.Code))
+                if (CheckString(updated.Code))
                     saved.Code = updated.Code;
                 else throw new Exception("Provided name was invalid");
             }

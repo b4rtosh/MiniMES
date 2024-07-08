@@ -4,7 +4,7 @@ using MiniMesTrainApi.Repositories;
 
 namespace MiniMesTrainApi.Controllers;
 
-[Route("api/v1/status")]
+[Route("status")]
 public class ProcessStatusController : Controller
 {
     private readonly DatabaseRepo<ProcessStatus> _repo;
@@ -68,13 +68,13 @@ public class ProcessStatusController : Controller
 
     [HttpPost]
     [Route("update")]
-    public IActionResult UpdateOne([FromQuery] string idStr, [FromQuery] ProcessStatus updated)
+    public async Task<IActionResult> UpdateOne([FromQuery] string idStr, [FromQuery] ProcessStatus updated)
     {
         int id;
         if (Validation.CheckInteger(idStr))
             id = Convert.ToInt32(idStr);
         else return BadRequest("Id is not an integer.");
-        var saved = _repo.GetById(id);
+        var saved = await _repo.GetById(id);
         try
         {
             if (updated.Name != "")

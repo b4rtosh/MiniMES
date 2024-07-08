@@ -1,42 +1,32 @@
 <script>
-  export default {
-    data()
-  {
-    return{
-    first: 'Machines',
-      second: 'Orders',
-      third: 'Products',
-      fourth: 'Parameters'
-  }
-}
-}
+
 </script>
 
 <template>
   <nav class="navbar">
     <ul class="navbar-nav">
-      <li class="nav-item" v-bind:id="firstItem" >
-        <a href="/machines" class="nav-link">{{ first }}</a>
-      </li>
-      <li class="nav-item" >
-        <a href="/about" class="nav-link" >{{ second }}</a>
+      <li class="nav-item">
+        <router-link to="/machine" class="nav-link">Machines</router-link>
       </li>
       <li class="nav-item">
-        <a href="/services" class="nav-link">{{third}}</a>
+        <router-link to="/order" class="nav-link">Orders</router-link>
       </li>
       <li class="nav-item">
-        <a href="/contact" class="nav-link">{{ fourth }}</a>
+        <router-link to="/product" class="nav-link">Products</router-link>
+      </li>
+      <li class="nav-item">
+        <router-link to="/parameter" class="nav-link">Parameters</router-link>
       </li>
     </ul>
   </nav>
+
 </template>
 
 <style scoped>
-@import "https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap";
 .navbar {
   display: flex;
   justify-content: center;
-  background-color: #333;
+  background-color: grey;
 }
 
 .navbar-nav {
@@ -47,16 +37,27 @@
 }
 
 .nav-item {
+  color: white;
   margin: 0 20px;
+
 }
 
 .nav-link {
-  text-decoration: none;
-  color: white;
-  transition: color 0.3s ease;
+  color: #fff; /* White text color */
+  text-decoration: none; /* No underline */
+  margin: 0 10px; /* Margin on all sides */
 }
 
+/* Hover state */
 .nav-link:hover {
-  color: #ddd;
+  color: #4c9baf; /* Change color on hover */
 }
+
+/* Active link state */
+.router-link-active {
+  color: #d5d4d4; 
+  font-weight: bold;
+}
+
+
 </style>
