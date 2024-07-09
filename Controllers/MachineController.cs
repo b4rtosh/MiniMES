@@ -32,7 +32,7 @@ public class MachineController : Controller
         }
 
         await _repo.CreateNew(machine);
-        return Ok("Added machine");
+        return Ok(machine);
     }
 
     [HttpGet]

@@ -1,0 +1,27 @@
+.machinesTable {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.machinesTable th {
+    background-color: #f2f2f2;
+    color: #333;
+    font-weight: bold;
+    padding: 12px 15px;
+}
+
+.machinesTable td {
+    padding: 10px 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+.machinesTable tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.machinesTable tr:hover {
+    background-color: #e2e2e2;
+}
+
+

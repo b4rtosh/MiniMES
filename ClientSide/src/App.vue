@@ -8,4 +8,8 @@ import NavBar from './components/NavBar.vue';
 </template>
 
 
-<style></style>
+<style>
+  body {
+    font-family: 'Arial', sans-serif;
+  }
+</style>

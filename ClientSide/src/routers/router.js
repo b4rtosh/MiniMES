@@ -11,13 +11,13 @@ import Products from "@/views/Products.vue";
 import Parameters from "@/views/Parameters.vue";
 import Home from "@/views/Home.vue";
 
-
+// Define routes
 const routes = [
     {path: '/', component: Home},
-    {path: '/machine', component: Machines},
-    {path: '/machine/add', component: MachineAdd},
-    {path: '/machine/:id', component: MachineDetail},
-    {path: '/machine/:id/edit', component: MachineAdd, props: true},
+    {path: '/machine', component: Machines, name: 'machines'},
+    // {path: '/machine/add', component: MachineAdd, name: 'machineAdd'},
+    //{path: '/machine/:id', component: MachineDetail, name: 'machineDetail', props: true},
+    //{path: '/machine/:id/update', component: MachineAdd, props: true, name: 'updateMachine'},
     {path: '/machine/:id/delete', component: MachineDetail, props: true},
     {path: '/order', component: Orders},
     {path: '/order/add', component: OrderAdd},
