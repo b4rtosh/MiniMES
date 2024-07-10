@@ -4,7 +4,7 @@ using MiniMesTrainApi.Repositories;
 
 namespace MiniMesTrainApi.Controllers;
 
-[Route("parameter")]
+[Route("processPara")]
 public class ParamController : Controller
 {
     private readonly DatabaseRepo<Parameter> _repo;
@@ -44,7 +44,7 @@ public class ParamController : Controller
     }
 
     [HttpGet]
-    [Route("{idStr}")]
+    [Route("{order}")]
     public IActionResult GetOne([FromRoute] string idStr)
     {
         int id;
@@ -57,15 +57,10 @@ public class ParamController : Controller
 
     [HttpDelete]
     [Route("delete")]
-    public IActionResult DeleteOne([FromQuery] string idStr)
+    public IActionResult DeleteOne([FromBody] int id)
     {
-        int id;
-        if (Validation.CheckInteger(idStr))
-            id = Convert.ToInt32(idStr);
-        else return BadRequest("Id is not an integer.");
-
         _repo.DelById(id);
-        return Ok("Deleted parameter");
+        return Ok("Deleted processPara");
     }
 
     [HttpPost]

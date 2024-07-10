@@ -1,27 +1,33 @@
-.machinesTable {
+.listOfObjects {
     width: 100%;
     border-collapse: collapse;
     text-align: left;
 }
 
-.machinesTable th {
+.listOfObjects th {
     background-color: #f2f2f2;
     color: #333;
     font-weight: bold;
     padding: 12px 15px;
 }
 
-.machinesTable td {
+.listOfObjects td {
     padding: 10px 15px;
     border-bottom: 1px solid #ddd;
 }
 
-.machinesTable tr:nth-child(even) {
+.listOfObjects tr:nth-child(even) {
     background-color: #f9f9f9;
 }
 
-.machinesTable tr:hover {
+.listOfObjects tr:hover {
     background-color: #e2e2e2;
 }
 
-
+#showDetailsButton {
+    color: white;
+    padding: 4px;
+    border: none;
+    cursor: pointer;
+    width: 30%;
+}

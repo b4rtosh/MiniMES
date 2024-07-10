@@ -53,27 +53,19 @@ public class MachineController : Controller
     }
 
     [HttpDelete]
-    [Route("delete")]
-    public IActionResult DeleteOne([FromQuery] string idStr)
+    [Route("delete/{id}")]
+    public async Task<IActionResult> DeleteOne([FromRoute] int id)
     {
-        int id;
-        if (Validation.CheckInteger(idStr))
-            id = Convert.ToInt32(idStr);
-        else return BadRequest("Id is not an integer.");
-
-        _repo.DelById(id);
+        await _repo.DelById(id);
         return Ok("Deleted machine");
     }
 
     [HttpPost]
     [Route("update")]
-    public async Task<IActionResult> UpdateOne([FromQuery] string idStr, [FromQuery] Machine updated)
+    public async Task<IActionResult> UpdateOne([FromBody] Machine updated)
     {
-        int id;
-        if (Validation.CheckInteger(idStr))
-            id = Convert.ToInt32(idStr);
-        else return BadRequest("Id is not an integer.");
-        var saved = await _repo.GetById(id);
+        var saved = await _repo.GetById(updated.Id);
+        if (saved == null) return NotFound("Machine not found");
         try
         {
             if (updated.Name != "")
@@ -92,7 +84,7 @@ public class MachineController : Controller
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message);
+            return BadRequest(e);
         }
 
         _repo.Update(saved);

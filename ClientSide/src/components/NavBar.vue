@@ -6,16 +6,16 @@
   <nav class="navbar">
     <ul class="navbar-nav">
       <li class="nav-item">
-        <router-link to="/machine" class="nav-link">Machines</router-link>
+        <router-link to="/machines" class="nav-link">Machines</router-link>
       </li>
       <li class="nav-item">
-        <router-link to="/order" class="nav-link">Orders</router-link>
+        <router-link to="/orders" class="nav-link">Orders</router-link>
       </li>
       <li class="nav-item">
-        <router-link to="/product" class="nav-link">Products</router-link>
+        <router-link to="/products" class="nav-link">Products</router-link>
       </li>
       <li class="nav-item">
-        <router-link to="/parameter" class="nav-link">Parameters</router-link>
+        <router-link to="/parameters" class="nav-link">Parameters</router-link>
       </li>
     </ul>
   </nav>
@@ -27,6 +27,7 @@
   display: flex;
   justify-content: center;
   background-color: grey;
+  border-radius: 10px;
 }
 
 .navbar-nav {

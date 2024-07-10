@@ -16,4 +16,6 @@ button:hover {
 .buttons{
     margin-top: 10px;
     text-align: center;
+    border-radius: 0;
+    box-shadow: none;
 }

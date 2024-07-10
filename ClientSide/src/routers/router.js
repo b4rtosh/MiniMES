@@ -1,12 +1,6 @@
 import {createRouter, createWebHistory} from 'vue-router';
-import MachineAdd from "@/views/MachineAdd.vue";
 import Machines from "@/views/Machines.vue";
-import MachineDetail from "@/views/MachineDetail.vue";
-import OrderAdd from "@/views/OrderAdd.vue";
 import Orders from "@/views/Orders.vue";
-import OrderDetail from "@/views/OrderDetail.vue";
-
-//import EditMachine from "@/views/EditMachine.vue";
 import Products from "@/views/Products.vue";
 import Parameters from "@/views/Parameters.vue";
 import Home from "@/views/Home.vue";
@@ -14,18 +8,10 @@ import Home from "@/views/Home.vue";
 // Define routes
 const routes = [
     {path: '/', component: Home},
-    {path: '/machine', component: Machines, name: 'machines'},
-    // {path: '/machine/add', component: MachineAdd, name: 'machineAdd'},
-    //{path: '/machine/:id', component: MachineDetail, name: 'machineDetail', props: true},
-    //{path: '/machine/:id/update', component: MachineAdd, props: true, name: 'updateMachine'},
-    {path: '/machine/:id/delete', component: MachineDetail, props: true},
-    {path: '/order', component: Orders},
-    {path: '/order/add', component: OrderAdd},
-    {path: '/order/:id', component: OrderDetail},
-    {path: '/oder/:id/edit', component: OrderAdd, props: true},
-    {path: '/order/:id/delete', component: OrderDetail, props: true},
-    {path: '/product', component: Products},
-    {path: '/parameter', component: Parameters},
+    {path: '/machines', component: Machines, name: 'Machines'},
+    {path: '/orders', component: Orders},
+    {path: '/products', component: Products},
+    {path: '/parameters', component: Parameters},
 ];
 
 const router = createRouter({

@@ -76,9 +76,10 @@ namespace MiniMesTrainApi.Repositories
         //     return await query.SingleOrDefaultAsync(e => EF.Property<int>(e, "Id") == id);
         // }
 
-        public async  void DelById(int id)
+        public async  Task DelById(int id)
         {
-            _dbset.Remove(await GetById(id));
+            TEntity entity = await _dbset.FindAsync(id) ?? throw new InvalidOperationException();
+            _dbset.Remove(entity);
             await _context.SaveChangesAsync();
         }
 

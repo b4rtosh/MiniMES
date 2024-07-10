@@ -32,7 +32,7 @@ public class ProcessParamController : Controller
     }
 
     [HttpGet]
-    [Route("{idStr}")]
+    [Route("{order}")]
     public IActionResult GetOne([FromRoute] string idStr)
     {
         int id;
@@ -46,15 +46,10 @@ public class ProcessParamController : Controller
 
     [HttpDelete]
     [Route("delete")]
-    public IActionResult DeleteOne([FromQuery] string idStr)
+    public IActionResult DeleteOne([FromBody] int id)
     {
-        int id;
-        if (Validation.CheckInteger(idStr))
-            id = Convert.ToInt32(idStr);
-        else return BadRequest("Id is not an integer.");
-
         _repo.DelById(id);
-        return Ok("Deleted process parameter");
+        return Ok("Deleted process processPara");
     }
 
     [HttpPost]
