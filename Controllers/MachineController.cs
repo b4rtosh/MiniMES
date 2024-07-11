@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MiniMesTrainApi.Models;
 using MiniMesTrainApi.Repositories;
 
@@ -48,10 +49,14 @@ public class MachineController : Controller
     [Route("{id}")]
     public async Task<IActionResult> GetOne([FromRoute] int id)
     {
-        var machine = await _repo.GetById(id);
+           var machine = await _repo.GetByIdWithIncludes(x => x.Id == id,
+                query => query
+                    .Include(m => m.Orders));
+        
+
         return Ok(machine);
     }
-
+    
     [HttpDelete]
     [Route("delete/{id}")]
     public async Task<IActionResult> DeleteOne([FromRoute] int id)

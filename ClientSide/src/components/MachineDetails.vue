@@ -19,7 +19,10 @@ export default{
       }
     }
   },
-  created(){
+  async created() {
+    this.machine = await axios.get(`http://localhost:23988/api/machine/${this.machine.id}`)
+        .then(response => response.data)
+        .catch(error => console.log(error));
     console.log('machine', this.machine);
     console.log('local machine', this.localMachine);
   },
@@ -57,10 +60,10 @@ export default{
         <th>Id</th>
         <th>Code</th>
       </tr>
-      <!--    <tr v-for="order in machine.orders" :key="order.id" data-test="order">-->
-      <!--      <td>{{ order.id }}</td>-->
-      <!--      <td>{{ order.code }}</td>-->
-      <!--    </tr>-->
+          <tr v-for="order in machine.orders" :key="order.id" data-test="order">
+            <td>{{ order.id }}</td>
+            <td>{{ order.code }}</td>
+          </tr>
     </table>
     <div class="buttons">
       <button type="reset" @click="$emit('cancel-details')">Cancel</button>

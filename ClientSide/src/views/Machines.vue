@@ -29,7 +29,7 @@ export default {
   methods: {
     async getMachines(){
       this.machines = await axios.get('http://localhost:23988/api/machine/all')
-          .then(response => response.data)
+          .then(response => response.data.$values)
           .catch(error => console.log(error));
     },
     async addMachine(newMachine){

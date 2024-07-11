@@ -18,7 +18,7 @@ public class OrderController : Controller
 
     [HttpPut]
     [Route("add")]
-    public IActionResult Add([FromQuery] Order order)
+    public async Task<IActionResult> Add([FromQuery] Order order)
     {
         try
         {
@@ -31,36 +31,35 @@ public class OrderController : Controller
             return BadRequest(ex.Message);
         }
 
-        _repo.CreateNew(order);
+        await _repo.CreateNew(order);
         return Ok("Product added");
     }
 
     [HttpGet]
     [Route("all")]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAll()
     {
-        var orders = _repo.GetAll();
+        var orders = await _repo.GetAll();
 
         return Ok(orders);
     }
 
     [HttpGet]
-    [Route("{order}")]
-    public async Task<IActionResult> GetOne([FromRoute] string idStr)
+    [Route("{id}")]
+    public async Task<IActionResult> GetOne([FromRoute] int id)
     {
-        int id;
-        if (CheckInteger(idStr))
-            id = Convert.ToInt32(idStr);
-        else return BadRequest("Id is not an integer.");
-        var order =  await _repo.GetByIdWithIncludes(x => x.Id == id, query => query.Include(x => x.Machine));
+        
+        var order =  await _repo.GetByIdWithIncludes(x => x.Id == id, query => query
+                .Include(x => x.Machine)
+                .Include(x => x.Product));
         return Ok(order);
     }
 
     [HttpDelete]
     [Route("delete")]
-    public IActionResult DeleteOne([FromBody] int id)
+    public async Task<IActionResult> DeleteOne([FromBody] int id)
     {
-       _repo.DelById(id);
+       await _repo.DelById(id);
         return Ok("Deleted product");
     }
 
