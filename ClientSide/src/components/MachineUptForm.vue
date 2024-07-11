@@ -1,20 +1,24 @@
 <script>
 import '@/assets/forms.css';
 export default{
-  name: 'MachineForm',
-  data(){
-    return{
-      localMachine: {
-        name: '',
-        description: ''
-      }
+  name: 'MachineUptForm',
+  props: {
+    machine: {
+      type: Object,
+      default: null,
     }
   },
-  methods:{
-    submitForm(){
-      this.$emit('add-input', this.localMachine);
+  data(){
+    return{
+      localMachine: {...this.machine}
     }
-  }}
+  
+  },
+methods: {
+  submitForm() {
+    this.$emit('submitForm', this.localMachine);
+  },
+},}
 
 </script>
 
@@ -32,7 +36,7 @@ export default{
         <input class="inputTxt" type="text" id="descriptionInput" v-model="localMachine.description" required><br>
       </div>
       <div class='buttons'>
-        <button type="submit">Add</button>
+        <button type="submit">Update</button>
         <button type="reset" @click="$emit('cancelForm')">Cancel</button>
       </div>
     </form>

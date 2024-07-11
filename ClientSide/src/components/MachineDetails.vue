@@ -2,11 +2,12 @@
 import '@/assets/details.css'
 import '@/assets/buttons.css'
 import Delete from "@/components/Delete.vue";
-import '@/components/MachineUptForm.vue';
-// import MachineUptForm from "@/components/MachineUptForm.vue";
+import MachineUptForm from "@/components/MachineUptForm.vue";
+import axios from 'axios';
+import {reactive} from 'vue';
 export default{
   name: "MachineDetails",
-  components: {Delete},
+  components: {MachineUptForm, Delete},
   props: {
     machine: {
       type: Object,
@@ -20,7 +21,7 @@ export default{
   },
   created(){
     console.log('machine', this.machine);
-    console.log('local mahcine', this.localMachine);
+    console.log('local machine', this.localMachine);
   },
   data(){
     return{
@@ -31,6 +32,14 @@ export default{
   methods:{
     openForm(){
       this.showForm = true;
+    },
+    async updateMachine(updatedMachine){
+      this.machine.name = updatedMachine.name;
+      this.machine.description = updatedMachine.description;
+      this.showForm= false;
+      await axios.post('http://localhost:23988/api/machine/update', updatedMachine)
+          .then(response => console.log(response.data))
+          .catch(error => console.log(error));
     }
   
   }
@@ -68,6 +77,7 @@ export default{
       v-if="showForm"
       :machine="machine"
       @cancelForm="showForm = false"
+      @submitForm="updateMachine"
     />
 </template>
 
