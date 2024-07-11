@@ -30,7 +30,11 @@ namespace MiniMesTrainApi.Repositories
         {
             return await _dbset.FindAsync(id);
         }
-
+        
+        public async Task<TEntity?> GetById(long id)
+        {
+            return await _dbset.FindAsync(id);
+        }
 
         public async Task<List<TEntity>> GetAll()
         {
@@ -63,28 +67,22 @@ namespace MiniMesTrainApi.Repositories
                 return null;//maybe handle it better?
             }
         }
-
-        // public async Task<TEntity?> GetByIdAsync(int id, params Expression<Func<TEntity, object>>[] includes)
-        // {
-        //     IQueryable<TEntity> query = _dbset;
-        //
-        //     foreach (var include in includes)
-        //     {
-        //         query = query.Include(include);
-        //     }
-        //
-        //     return await query.SingleOrDefaultAsync(e => EF.Property<int>(e, "Id") == id);
-        // }
-
-        public async  Task DelById(int id)
+        
+        public async Task DelById(int id)
+        {
+            TEntity entity = await _dbset.FindAsync(id) ?? throw new InvalidOperationException();
+            _dbset.Remove(entity);
+            await _context.SaveChangesAsync();
+        }
+        
+        public async Task DelById(long id)
         {
             TEntity entity = await _dbset.FindAsync(id) ?? throw new InvalidOperationException();
             _dbset.Remove(entity);
             await _context.SaveChangesAsync();
         }
 
-
-        public async void Update(TEntity entity)
+        public async Task Update(TEntity entity)
         {
             _dbset.Update(entity);
             await _context.SaveChangesAsync();

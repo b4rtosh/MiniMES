@@ -17,6 +17,9 @@
       <li class="nav-item">
         <router-link to="/parameters" class="nav-link">Parameters</router-link>
       </li>
+   <li class="nav-item">
+        <router-link to="/statuses" class="nav-link">Statuses</router-link>
+      </li>
     </ul>
   </nav>
 

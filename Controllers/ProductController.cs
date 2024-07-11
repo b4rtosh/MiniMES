@@ -1,10 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MiniMesTrainApi.Models;
 using MiniMesTrainApi.Repositories;
 
 namespace MiniMesTrainApi.Controllers;
 
-[Route("product")]
+[Route("api/product")]
 public class ProductController : Controller
 {
     private readonly DatabaseRepo<Product> _repo;
@@ -16,7 +17,7 @@ public class ProductController : Controller
 
     [HttpPut]
     [Route("add")]
-    public IActionResult Add([FromQuery] Product product)
+    public async Task<IActionResult> Add([FromBody] Product product)
     {
         try
         {
@@ -30,47 +31,43 @@ public class ProductController : Controller
             return BadRequest(ex.Message);
         }
 
-        _repo.CreateNew(product);
+        await _repo.CreateNew(product);
         return Ok("Product added");
     }
 
     [HttpGet]
     [Route("all")]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAll()
     {
-        var products = _repo.GetAll();
+        var products = await _repo.GetAll();
         return Ok(products);
     }
 
     [HttpGet]
     [Route("{id}")]
-    public IActionResult GetOne([FromRoute] string idStr)
+    public async Task<IActionResult> GetOne([FromRoute] int id)
     {
-        int id;
-        if (Validation.CheckInteger(idStr))
-            id = Convert.ToInt32(idStr);
-        else return BadRequest("Id is not an integer.");
-        var product = _repo.GetById(id);
+        var product = await _repo.GetByIdWithIncludes(x => x.Id == id,
+            query => query
+                .Include(m => m.Orders));
         return Ok(product);
     }
 
     [HttpDelete]
-    [Route("delete")]
-    public IActionResult DeleteOne([FromBody] int id)
+    [Route("delete/{id}")]
+    public async Task<IActionResult> DeleteOne([FromRoute] int id)
     {
-        _repo.DelById(id);
+        await _repo.DelById(id);
         return Ok("Deleted product");
     }
 
     [HttpPost]
     [Route("update")]
-    public async Task<IActionResult> UpdateOne([FromQuery] string idStr, [FromQuery] Product updated)
+    public async Task<IActionResult> UpdateOne([FromBody] Product updated)
     {
-        int id;
-        if (Validation.CheckInteger(idStr))
-            id = Convert.ToInt32(idStr);
-        else return BadRequest("Id is not an integer.");
-        var saved = await _repo.GetById(id);
+        Console.WriteLine($"Received update request for Product ID: {updated.Id}");
+        var saved = await _repo.GetById(updated.Id);
+        if (saved == null) return NotFound("Product not found");
         try
         {
             if (updated.Code != "")
@@ -86,13 +83,12 @@ public class ProductController : Controller
                     saved.Description = updated.Description;
                 else throw new Exception("Provided description was invalid");
             }
+            await _repo.Update(saved);
+            return Ok($"Updated object:\n{saved}");
         }
         catch (Exception e)
         {
             return BadRequest(e.Message);
         }
-
-        _repo.Update(saved);
-        return Ok($"Updated object:\n{saved}");
     }
 }

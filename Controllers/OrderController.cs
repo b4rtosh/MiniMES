@@ -6,7 +6,7 @@ using static MiniMesTrainApi.Models.Validation;
 
 namespace MiniMesTrainApi.Controllers;
 
-[Route("order")]
+[Route("api/order")]
 public class OrderController : Controller
 {
     private readonly DatabaseRepo<Order> _repo;
@@ -18,7 +18,7 @@ public class OrderController : Controller
 
     [HttpPut]
     [Route("add")]
-    public async Task<IActionResult> Add([FromQuery] Order order)
+    public async Task<IActionResult> Add([FromBody] Order order)
     {
         try
         {
@@ -30,7 +30,6 @@ public class OrderController : Controller
         {
             return BadRequest(ex.Message);
         }
-
         await _repo.CreateNew(order);
         return Ok("Product added");
     }
@@ -46,18 +45,19 @@ public class OrderController : Controller
 
     [HttpGet]
     [Route("{id}")]
-    public async Task<IActionResult> GetOne([FromRoute] int id)
+    public async Task<IActionResult> GetOne([FromRoute] long id)
     {
         
         var order =  await _repo.GetByIdWithIncludes(x => x.Id == id, query => query
                 .Include(x => x.Machine)
-                .Include(x => x.Product));
+                .Include(x => x.Product)
+            .Include(m => m.Processes));
         return Ok(order);
     }
 
     [HttpDelete]
-    [Route("delete")]
-    public async Task<IActionResult> DeleteOne([FromBody] int id)
+    [Route("delete/{id}")]
+    public async Task<IActionResult> DeleteOne([FromRoute] long id)
     {
        await _repo.DelById(id);
         return Ok("Deleted product");
@@ -65,14 +65,9 @@ public class OrderController : Controller
 
     [HttpPost]
     [Route("update")]
-    public async Task<IActionResult> UpdateOne([FromQuery] string idStr, [FromQuery] Order updated)
+    public async Task<IActionResult> UpdateOne([FromBody] Order updated)
     {
-        int id;
-        if (CheckInteger(idStr))
-            id = Convert.ToInt32(idStr);
-        else return BadRequest("Id is not an integer.");
-
-        var saved = await _repo.GetById(id);
+        var saved = await _repo.GetById(updated.Id);
         try
         {
             if (updated.Code != "")
@@ -91,7 +86,7 @@ public class OrderController : Controller
             return BadRequest(e.Message);
         }
 
-        _repo.Update(saved);
+        await _repo.Update(saved);
         return Ok($"Updated object:\n{saved}");
     }
 }

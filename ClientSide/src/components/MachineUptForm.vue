@@ -25,7 +25,7 @@ methods: {
 <template>
   <!--  add machine dialog which covers list -->
   <div>
-    <h1>Add Machine</h1>
+    <h1>Update Machine</h1>
     <form @submit.prevent="submitForm">
       <div>
         <label for="nameInput">Name:</label>

@@ -92,7 +92,7 @@ public class MachineController : Controller
             return BadRequest(e);
         }
 
-        _repo.Update(saved);
+        await _repo.Update(saved);
         return Ok($"Updated object:\n{saved}");
     }
 }

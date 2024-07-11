@@ -4,6 +4,7 @@ import Orders from "@/views/Orders.vue";
 import Products from "@/views/Products.vue";
 import Parameters from "@/views/Parameters.vue";
 import Home from "@/views/Home.vue";
+import Statuses from "@/views/ProcStatuses.vue";
 
 // Define routes
 const routes = [
@@ -12,6 +13,7 @@ const routes = [
     {path: '/orders', component: Orders},
     {path: '/products', component: Products},
     {path: '/parameters', component: Parameters},
+    {path: '/statuses', component: Statuses},
 ];
 
 const router = createRouter({

@@ -2,13 +2,13 @@
 import '@/assets/details.css'
 import '@/assets/buttons.css'
 import Delete from "@/components/Delete.vue";
-import MachineUptForm from "@/components/MachineUptForm.vue";
+import OrderUptForm from "@/components/OrderUptForm.vue";
 import axios from 'axios';
 
 
 export default{
-  name: "MachineDetails",
-  components: {MachineUptForm, Delete},
+  name: "OrderDetails",
+  components: {OrderUptForm, Delete},
   props: ['id'],
   created(){
     this.getDetailedObject();
@@ -25,56 +25,70 @@ export default{
       this.showForm = true;
     },
     async getDetailedObject(){
-      this.selectedObject = await axios.get(`http://localhost:23988/api/machine/${this.id}`)
+      this.selectedObject = await axios.get(`http://localhost:23988/api/order/${this.id}`)
           .then(response => response.data)
           .catch(error => console.log(error));
+      console.log(this.selectedObject);
     },
     async updateObject(updatedObject){
-      this.selectedObject.name = updatedObject.name;
-      this.selectedObject.description = updatedObject.description;
+      this.selectedObject.code = updatedObject.code;
+      this.selectedObject.quantity = updatedObject.quantity;
+      this.selectedObject.machineId = updatedObject.machineId;
+      this.selectedObject.productId = updatedObject.productId;
       this.showForm= false;
-      await axios.post('http://localhost:23988/api/machine/update', updatedObject)
+      await axios.post('http://localhost:23988/api/order/update', updatedObject)
           .then(response => console.log(response.data))
           .catch(error => console.log(error));
+      await this.getDetailedObject();
     }
-  
   }
 }
 </script>
 
 <template>
   <div v-if="selectedObject && !showForm">
-    <h1>Machine details</h1>
+    <h1>Order details</h1>
     <p>Id: {{ selectedObject.id }}</p>
-    <p>Name: {{ selectedObject.name }}</p>
-    <p>Description: {{ selectedObject.description }}</p>
+    <p>Code: {{ selectedObject.code }}</p>
+    <p>Quantity: {{ selectedObject.quantity }}</p>
+    <div class="parentDiv">
+    <div class="childDiv" style="margin-right: 40%">
+      <h2>Machine</h2>
+      <p>Id: {{selectedObject.machine.id}}</p>
+      <p>Name: {{selectedObject.machine.name}}</p>
+    </div>
+      <div class="childDiv" >
+        <h2>Product</h2>
+        <p>Id: {{selectedObject.product.id}}</p>
+        <p>Code: {{selectedObject.product.code}}</p>
+      </div>
+      
+    </div>
     <table class="listOfObjects">
       <tr>
         <th>Id</th>
-        <th>Code</th>
       </tr>
-          <tr v-for="order in selectedObject.orders.$values" :key="order.id" data-test="order">
-            <td>{{ order.id }}</td>
-            <td>{{ order.code }}</td>
-          </tr>
+      <tr v-for="process in selectedObject.processes.$values" :key="process.id" data-test="process">
+        <td>{{ process.id }}</td>
+      </tr>
     </table>
     <div class="buttons">
       <button type="reset" @click="$emit('cancel-details')">Cancel</button>
       <button type="button" @click="showDelete = true">Delete</button>
       <button type="button" @click="openForm">Update</button>
     </div>
-    <Delete 
+    <Delete
         v-if="showDelete"
         @cancel-delete="showDelete = false"
         @submit-delete="$emit('delete', selectedObject)"
     />
   </div>
-  <MachineUptForm
+  <OrderUptForm
       v-if="showForm"
       :machine="selectedObject"
       @cancelForm="showForm = false"
       @submitForm="updateObject"
-    />
+  />
 </template>
 
 <style scoped>

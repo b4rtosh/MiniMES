@@ -20,22 +20,22 @@ export default {
       showForm: false,
       showDetails: false,
       showUptForm: false,
-      selectedMachine: null,
+      selectedObject: null,
     }
   },
   created(){
-    this.getMachines();
+    this.getAllObjects();
   },
   methods: {
-    async getMachines(){
+    async getAllObjects(){
       this.machines = await axios.get('http://localhost:23988/api/machine/all')
           .then(response => response.data.$values)
           .catch(error => console.log(error));
     },
-    async addMachine(newMachine){
+    async addObject(newMachine){
       try {
         await axios.put('http://localhost:23988/api/machine/add', newMachine)
-        await this.getMachines();
+        await this.getAllObjects();
         this.closeForm();
       } catch (error){
         console.log('Error', error);
@@ -48,14 +48,14 @@ export default {
           .then(response => response.data)
           .catch(error => console.log('Error', error));
       this.closeForm();
-      await this.getMachines();
+      await this.getAllObjects();
     },
     async updateObject(object){
       console.log(object);
       await axios.post('http://localhost:23988/api/machine/update', object)
           .then(response => response.data)
           .catch(error => console.log('Error', error));
-      await this.getMachines();
+      await this.getAllObjects();
     },
     openForm(){
       this.showForm = true;
@@ -66,7 +66,7 @@ export default {
       this.showDetails = false;
     },    
     openDetails(machine){
-      this.selectedMachine = machine;
+      this.selectedObject = machine;
       this.showDetails = true;
       this.showForm = false;
     },
@@ -86,16 +86,16 @@ export default {
         :machines="machines"
         @show-form="openForm"
         @show-details="openDetails"
-        @refresh="getMachines"
+        @refresh="getAllObjects"
     />
     <MachineForm
         v-if="showForm"
-        @add-input="addMachine"
+        @add-input="addObject"
         @cancel-form="closeForm"
     />
       <MachineDetails
         v-if="showDetails"
-        :machine="selectedMachine"
+        :id="selectedObject.id"
         @cancel-details="closeDetails"
         @delete="deleteObject"
       />

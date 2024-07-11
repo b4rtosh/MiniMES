@@ -1,10 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MiniMesTrainApi.Models;
 using MiniMesTrainApi.Repositories;
 
 namespace MiniMesTrainApi.Controllers;
 
-[Route("id")]
+[Route("api/status")]
 public class ProcessStatusController : Controller
 {
     private readonly DatabaseRepo<ProcessStatus> _repo;
@@ -16,7 +17,7 @@ public class ProcessStatusController : Controller
 
     [HttpPut]
     [Route("add")]
-    public IActionResult Add([FromQuery] ProcessStatus status)
+    public async Task<IActionResult> Add([FromBody] ProcessStatus status)
     {
         try
         {
@@ -28,48 +29,43 @@ public class ProcessStatusController : Controller
             return BadRequest(ex.Message);
         }
 
-        _repo.CreateNew(status);
+        await _repo.CreateNew(status);
         return Ok("Status added");
     }
 
 
     [HttpGet]
     [Route("all")]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAll()
     {
-        var statuses = _repo.GetAll();
+        var statuses = await _repo.GetAll();
         return Ok(statuses);
     }
 
     [HttpGet]
-    [Route("{order}")]
-    public IActionResult GetOne([FromRoute] string idStr)
+    [Route("{id}")]
+    public async Task<IActionResult> GetOne([FromRoute] int id)
     {
-        int id;
-        if (Validation.CheckInteger(idStr))
-            id = Convert.ToInt32(idStr);
-        else return BadRequest("Id is not an integer.");
-        var status = _repo.GetById(id);
+        var status = await _repo.GetByIdWithIncludes(x => x.Id == id,
+            query => query
+                .Include(m => m.Processes));
         return Ok(status);
     }
 
     [HttpDelete]
-    [Route("delete")]
-    public IActionResult DeleteOne([FromQuery] int id)
+    [Route("delete/{id}")]
+    public async Task<IActionResult> DeleteOne([FromRoute] int id)
     {
-       _repo.DelById(id);
+       await _repo.DelById(id);
         return Ok("Deleted id");
     }
 
     [HttpPost]
     [Route("update")]
-    public async Task<IActionResult> UpdateOne([FromQuery] string idStr, [FromQuery] ProcessStatus updated)
+    public async Task<IActionResult> UpdateOne([FromBody] ProcessStatus updated)
     {
-        int id;
-        if (Validation.CheckInteger(idStr))
-            id = Convert.ToInt32(idStr);
-        else return BadRequest("Id is not an integer.");
-        var saved = await _repo.GetById(id);
+        var saved = await _repo.GetById(updated.Id);
+        if (saved == null) return BadRequest("Object not found");
         try
         {
             if (updated.Name != "")
@@ -78,13 +74,14 @@ public class ProcessStatusController : Controller
                     saved.Name = updated.Name;
                 else throw new Exception("Provided name was invalid");
             }
+            await _repo.Update(saved);
+            return Ok($"Updated object:\n{saved}");
         }
         catch (Exception e)
         {
             return BadRequest(e.Message);
         }
 
-        _repo.Update(saved);
-        return Ok($"Updated object:\n{saved}");
+       
     }
 }

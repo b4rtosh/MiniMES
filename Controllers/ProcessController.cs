@@ -16,7 +16,7 @@ public class ProcessController : Controller
 
     [HttpPut]
     [Route("add")]
-    public IActionResult Add([FromQuery] Process process)
+    public async Task<IActionResult> Add([FromQuery] Process process)
     {
         try
         {
@@ -29,37 +29,32 @@ public class ProcessController : Controller
             return BadRequest(ex.Message);
         }
 
-        _repo.CreateNew(process);
+        await _repo.CreateNew(process);
         return Ok("Process added");
     }
 
     [HttpGet]
     [Route("all")]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAll()
     {
-        var processes = _repo.GetAll();
+        var processes = await _repo.GetAll();
 
         return Ok(processes);
     }
 
     [HttpGet]
-    [Route("{order}")]
-    public IActionResult GetOne([FromRoute] string idStr)
+    [Route("{id}")]
+    public async Task<IActionResult> GetOne([FromRoute] int id)
     {
-        int id;
-        if (Validation.CheckInteger(idStr))
-            id = Convert.ToInt32(idStr);
-        else return BadRequest("Id is not an integer.");
-
-        var process = _repo.GetById(id);
+        var process = await _repo.GetById(id);
         return Ok(process);
     }
 
     [HttpDelete]
     [Route("delete")]
-    public IActionResult DeleteOne([FromBody] int id)
+    public async Task<IActionResult> DeleteOne([FromBody] int id)
     {
-        _repo.DelById(id);
+        await _repo.DelById(id);
         return Ok("Deleted product");
     }
 

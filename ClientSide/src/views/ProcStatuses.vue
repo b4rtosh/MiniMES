@@ -1,18 +1,17 @@
 <script>
 import axios from 'axios'
-import OrderList from "@/components/OrderList.vue";
-import OrderDetails from "@/components/OrderDetails.vue";
-import OrderForm from "@/components/OrderForm.vue";
+import ProcStatusList from "@/components/ProcStatusList.vue";
+import ProcStatusDetails from "@/components/ProcStatusDetails.vue";
+import ProcStatusForm from "@/components/ProcStatusForm.vue";
 import '@/assets/all.css'
-import OrderUptForm from "@/components/OrderUptForm.vue";
-
+import ProcStatusUptForm from "@/components/ProductUptForm.vue";
 export default {
-  name: 'Orders',
+  name: 'Statuses',
   components: {
-    OrderUptForm,
-    OrderList,
-    OrderDetails,
-    OrderForm,
+    ProcStatusList,
+    ProcStatusDetails,
+    ProcStatusForm,
+    ProcStatusUptForm,
   },
   data(){
     return{
@@ -28,13 +27,13 @@ export default {
   },
   methods: {
     async getAllObjects(){
-      this.objects = await axios.get('http://localhost:23988/api/order/all')
+      this.objects = await axios.get('http://localhost:23988/api/status/all')
           .then(response => response.data.$values)
           .catch(error => console.log(error));
     },
     async addObject(newObject){
       try {
-        await axios.put('http://localhost:23988/api/order/add', newObject)
+        await axios.put('http://localhost:23988/api/status/add', newObject)
         await this.getAllObjects();
         this.closeForm();
       } catch (error){
@@ -44,7 +43,7 @@ export default {
 
     async deleteObject(object){
       console.log(object);
-      await axios.delete(`http://localhost:23988/api/order/delete/${object.id}`)
+      await axios.delete(`http://localhost:23988/api/status/delete/${object.id}`)
           .then(response => response.data)
           .catch(error => console.log('Error', error));
       this.closeForm();
@@ -52,7 +51,7 @@ export default {
     },
     async updateObject(object){
       console.log(object);
-      await axios.post('http://localhost:23988/api/order/update', object)
+      await axios.post('http://localhost:23988/api/product/update', object)
           .then(response => response.data)
           .catch(error => console.log('Error', error));
       await this.getAllObjects();
@@ -65,8 +64,8 @@ export default {
       this.showForm = false;
       this.showDetails = false;
     },
-    openDetails(object){
-      this.selectedObject = object;
+    openDetails(product){
+      this.selectedObject = product;
       this.showDetails = true;
       this.showForm = false;
     },
@@ -81,19 +80,19 @@ export default {
 
 <template>
 
-  <OrderList
+  <ProcStatusList
       v-if="!showForm && !showDetails && !showUptForm"
       :objects="objects"
       @show-form="openForm"
       @show-details="openDetails"
       @refresh="getAllObjects"
   />
-  <OrderForm
+  <ProcStatusForm
       v-if="showForm"
       @add-input="addObject"
       @cancel-form="closeForm"
   />
-  <OrderDetails
+  <ProcStatusDetails
       v-if="showDetails"
       :id="selectedObject.id"
       @cancel-details="closeDetails"

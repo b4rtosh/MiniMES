@@ -14,3 +14,22 @@ form {
 label {
     font-weight: bold;
 }
+select{
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.parentDiv{
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    margin: 1rem;
+    padding: 2rem 2rem;
+    text-align: center;
+}
+
+.childDiv{
+    display: inline-block;
+    
+}
