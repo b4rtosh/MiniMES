@@ -1,7 +1,7 @@
 <script>
 import '@/assets/forms.css';
 export default{
-  name: 'ProcStatusForm',
+  name: 'ParameterForm',
   data(){
     return{
       localObject: {
@@ -21,11 +21,15 @@ export default{
 <template>
   <!--  add machine dialog which covers list -->
   <div>
-    <h1>Add Status</h1>
+    <h1>Add Parameter</h1>
     <form @submit.prevent="submitForm">
       <div>
         <label for="codeInput">Name:</label>
-        <input class="inputTxt" type="text" id="codeInput" v-model="localObject.name" pattern="[a-zA-Z\ ]+" required><br>
+        <input class="inputTxt" type="text" id="codeInput" v-model="localObject.name" pattern="[a-zA-Z\ ]+"  required><br>
+      </div>
+      <div>
+        <label for="unitInput">Unit:</label>
+        <input class="inputTxt" type="text" id="unitInput" v-model="localObject.unit" pattern="[a-zA-Z\ ]+" required><br>
       </div>
       <div class='buttons'>
         <button type="submit">Add</button>

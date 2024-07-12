@@ -1,10 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using MiniMesTrainApi.Models;
 using MiniMesTrainApi.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace MiniMesTrainApi.Controllers;
 
-[Route("process")]
+[Route("api/process")]
 public class ProcessController : Controller
 {
     private readonly DatabaseRepo<Process> _repo;
@@ -16,21 +17,20 @@ public class ProcessController : Controller
 
     [HttpPut]
     [Route("add")]
-    public async Task<IActionResult> Add([FromQuery] Process process)
+    public async Task<IActionResult> Add([FromBody] Process process)
     {
         try
         {
             if (process.SerialNumber == "") throw new Exception("SerialNumber is required");
             if (!Validation.CheckStringNoSpaces(process.SerialNumber)) throw new Exception("Code is invalid");
-            // how to validate machine id and product id and quantity
+            
+            process = await _repo.CreateNew(process);
+            return Ok(process);
         }
         catch (Exception ex)
         {
             return BadRequest(ex.Message);
         }
-
-        await _repo.CreateNew(process);
-        return Ok("Process added");
     }
 
     [HttpGet]
@@ -46,13 +46,18 @@ public class ProcessController : Controller
     [Route("{id}")]
     public async Task<IActionResult> GetOne([FromRoute] int id)
     {
-        var process = await _repo.GetById(id);
+        var process = await _repo.GetByIdWithIncludes(x => x.Id == id,
+            query => query
+                .Include(m => m.Order)
+                .Include(m => m.ProcessStatus)
+                .Include(n => n.ProcessParameters)
+            );
         return Ok(process);
     }
 
     [HttpDelete]
-    [Route("delete")]
-    public async Task<IActionResult> DeleteOne([FromBody] int id)
+    [Route("delete/{id}")]
+    public async Task<IActionResult> DeleteOne([FromRoute] int id)
     {
         await _repo.DelById(id);
         return Ok("Deleted product");
@@ -60,14 +65,10 @@ public class ProcessController : Controller
 
     [HttpPost]
     [Route("update")]
-    public async Task<IActionResult> UpdateOne([FromQuery] string idStr, [FromQuery] Process updated)
+    public async Task<IActionResult> UpdateOne([FromBody] Process updated)
     {
-        int id;
-        if (Validation.CheckInteger(idStr))
-            id = Convert.ToInt32(idStr);
-        else return BadRequest("Id is not an integer.");
-
-        var saved = await _repo.GetById(id);
+        var saved = await _repo.GetById(updated.Id);
+        if (saved == null) return BadRequest("Object not found");
         try
         {
             if (updated.SerialNumber != "")
@@ -79,13 +80,15 @@ public class ProcessController : Controller
 
             if (updated.OrderId != saved.OrderId) saved.OrderId = updated.OrderId;
             if (updated.StatusId != saved.StatusId) saved.StatusId = updated.StatusId;
+            
+            await _repo.Update(saved);
+            return Ok($"Updated object:\n{saved}");
         }
         catch (Exception e)
         {
             return BadRequest(e.Message);
         }
 
-        _repo.Update(saved);
-        return Ok($"Updated object:\n{saved}");
+        
     }
 }

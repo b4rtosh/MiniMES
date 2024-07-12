@@ -1,10 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MiniMesTrainApi.Models;
 using MiniMesTrainApi.Repositories;
 
 namespace MiniMesTrainApi.Controllers;
 
-[Route("processparam")]
+[Route("api/processparam")]
 public class ProcessParamController : Controller
 {
     private readonly DatabaseRepo<ProcessParameter> _repo;
@@ -16,52 +17,53 @@ public class ProcessParamController : Controller
 
     [HttpPut]
     [Route("add")]
-    public IActionResult Add([FromQuery] ProcessParameter processParam)
+    public async Task<IActionResult> Add([FromBody] ProcessParameter processParam)
     {
-        _repo.CreateNew(processParam);
-        return Ok("Process added");
+        try
+        {
+            if (processParam.Value == 0) throw new Exception("Value is required");
+            await _repo.CreateNew(processParam);
+            return Ok("Process added");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
     [HttpGet]
     [Route("all")]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAll()
     {
-        var processParams = _repo.GetAll();
+        var processParams = await _repo.GetAll();
 
         return Ok(processParams);
     }
 
     [HttpGet]
-    [Route("{order}")]
-    public IActionResult GetOne([FromRoute] string idStr)
+    [Route("{id}")]
+    public async Task<IActionResult> GetOne([FromRoute] int id)
     {
-        int id;
-        if (Validation.CheckInteger(idStr))
-            id = Convert.ToInt32(idStr);
-        else return BadRequest("Id is not an integer.");
-
-        var processParam = _repo.GetById(id);
+      var processParam = await _repo.GetByIdWithIncludes(x => x.Id == id,
+          query => query
+              .Include(x => x.Process)
+              .Include(x => x.Parameter));
         return Ok(processParam);
     }
 
     [HttpDelete]
-    [Route("delete")]
-    public IActionResult DeleteOne([FromBody] int id)
+    [Route("delete/{id}")]
+    public async Task<IActionResult> DeleteOne([FromBody] int id)
     {
-        _repo.DelById(id);
+        await _repo.DelById(id);
         return Ok("Deleted process processPara");
     }
 
     [HttpPost]
     [Route("update")]
-    public async Task<IActionResult> UpdateOne([FromQuery] string idStr, [FromQuery] ProcessParameter updated)
+    public async Task<IActionResult> UpdateOne([FromBody] ProcessParameter updated)
     {
-        int id;
-        if (Validation.CheckInteger(idStr))
-            id = Convert.ToInt32(idStr);
-        else return BadRequest("Id is not an integer.");
-
-        var saved = await _repo.GetById(id);
+         var saved = await _repo.GetById(updated.Id);
         try
         {
             if (updated.ProcessId != saved.ProcessId) saved.ProcessId = updated.ProcessId;
@@ -73,7 +75,7 @@ public class ProcessParamController : Controller
             return BadRequest(e.Message);
         }
 
-        _repo.Update(saved);
+        await _repo.Update(saved);
         return Ok($"Updated object:\n{saved}");
     }
 }

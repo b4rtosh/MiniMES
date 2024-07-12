@@ -1,10 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using MiniMesTrainApi.Models;
 using MiniMesTrainApi.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace MiniMesTrainApi.Controllers;
 
-[Route("processPara")]
+[Route("api/parameter")]
 public class ParamController : Controller
 {
     private readonly DatabaseRepo<Parameter> _repo;
@@ -16,7 +17,7 @@ public class ParamController : Controller
 
     [HttpPut]
     [Route("add")]
-    public IActionResult Add([FromQuery] Parameter parameter)
+    public async Task<IActionResult> Add([FromBody] Parameter parameter)
     {
         try
         {
@@ -30,48 +31,43 @@ public class ParamController : Controller
             return BadRequest(ex.Message);
         }
 
-        _repo.CreateNew(parameter);
+        await _repo.CreateNew(parameter);
         return Ok("Parameter added");
     }
 
 
     [HttpGet]
     [Route("all")]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAll()
     {
-        var parameters = _repo.GetAll();
+        var parameters = await _repo.GetAll();
         return Ok(parameters);
     }
 
     [HttpGet]
-    [Route("{order}")]
-    public IActionResult GetOne([FromRoute] string idStr)
+    [Route("{id}")]
+    public async Task<IActionResult> GetOne([FromRoute] int id)
     {
-        int id;
-        if (Validation.CheckInteger(idStr))
-            id = Convert.ToInt32(idStr);
-        else return BadRequest("Id is not an integer.");
-        var parameter = _repo.GetById(id);
+        var parameter = await _repo.GetByIdWithIncludes(x => x.Id == id,
+            query => query
+                .Include(m => m.ProcessParameters));
         return Ok(parameter);
     }
 
     [HttpDelete]
-    [Route("delete")]
-    public IActionResult DeleteOne([FromBody] int id)
+    [Route("delete/{id}")]
+    public async Task<IActionResult> DeleteOne([FromRoute] int id)
     {
-        _repo.DelById(id);
+        await _repo.DelById(id);
         return Ok("Deleted processPara");
     }
 
     [HttpPost]
     [Route("update")]
-    public async Task<IActionResult> UpdateOne([FromQuery] string idStr, [FromQuery] Parameter updated)
+    public async Task<IActionResult> UpdateOne([FromBody] Parameter updated)
     {
-        int id;
-        if (Validation.CheckInteger(idStr))
-            id = Convert.ToInt32(idStr);
-        else return BadRequest("Id is not an integer.");
-        var saved = await _repo.GetById(id);
+        var saved = await _repo.GetById(updated.Id);
+        if (saved == null) return NotFound("Parameter not found");
         try
         {
             if (updated.Name != "")
@@ -87,13 +83,14 @@ public class ParamController : Controller
                     saved.Unit = updated.Unit;
                 else throw new Exception("Provided description was invalid");
             }
+            await _repo.Update(saved);
+            return Ok($"Updated object:\n{saved}");
         }
         catch (Exception e)
         {
             return BadRequest(e.Message);
         }
 
-        _repo.Update(saved);
-        return Ok($"Updated object:\n{saved}");
+        
     }
 }

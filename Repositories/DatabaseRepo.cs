@@ -1,5 +1,7 @@
 using System.Linq.Expressions;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace MiniMesTrainApi.Repositories
 {
@@ -20,17 +22,12 @@ namespace MiniMesTrainApi.Repositories
             return _context;
         }
 
-        public async Task CreateNew (TEntity entity)
+        public async Task<TEntity> CreateNew (TEntity entity)
         {
             await _dbset.AddAsync(entity);
             await _context.SaveChangesAsync();
+            return entity;
         }
-
-        public async Task<TEntity?> GetById(int id)
-        {
-            return await _dbset.FindAsync(id);
-        }
-        
         public async Task<TEntity?> GetById(long id)
         {
             return await _dbset.FindAsync(id);
@@ -81,7 +78,7 @@ namespace MiniMesTrainApi.Repositories
             _dbset.Remove(entity);
             await _context.SaveChangesAsync();
         }
-
+        
         public async Task Update(TEntity entity)
         {
             _dbset.Update(entity);

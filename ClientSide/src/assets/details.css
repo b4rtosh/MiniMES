@@ -1,3 +1,25 @@
+#details{
+    display: flex;
+    justify-content: center;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+
+
+.parentDiv{
+    display: flex;
+    justify-content: space-evenly;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.childDiv{
+    width: 30%;
+}
+
 
 h1 {
     color: #333;

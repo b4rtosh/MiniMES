@@ -1,13 +1,97 @@
 <script>
-export default{
-  name: 'Parameters'
-};
+import axios from 'axios'
+import ParameterList from "@/components/ParameterList.vue";
+import ParameterDetails from "@/components/ParameterDetails.vue";
+import ParameterForm from "@/components/ParameterForm.vue";
+import '@/assets/all.css'
+export default {
+  name: 'Parameters',
+  components: {
+    ParameterList,
+    ParameterDetails,
+    ParameterForm,
+  },
+  data(){
+    return{
+      objects: [],
+      showForm: false,
+      showDetails: false,
+      showUptForm: false,
+      selectedObject: null,
+    }
+  },
+  created(){
+    this.getAllObjects();
+  },
+  methods: {
+    async getAllObjects(){
+      this.objects = await axios.get('http://localhost:23988/api/parameter/all')
+          .then(response => response.data.$values)
+          .catch(error => console.log(error));
+    },
+    async addObject(newObject){
+      try {
+        await axios.put('http://localhost:23988/api/parameter/add', newObject)
+        await this.getAllObjects();
+        this.closeForm();
+      } catch (error){
+        console.log('Error', error);
+      }
+    },
+
+    async deleteObject(object){
+      console.log(object);
+      await axios.delete(`http://localhost:23988/api/parameter/delete/${object.id}`)
+          .then(response => response.data)
+          .catch(error => console.log('Error', error));
+      this.closeForm();
+      await this.getAllObjects();
+    },
+    openForm(){
+      this.showForm = true;
+      this.showDetails = false;
+    },
+    closeForm(){
+      this.showForm = false;
+      this.showDetails = false;
+    },
+    openDetails(product){
+      this.selectedObject = product;
+      this.showDetails = true;
+      this.showForm = false;
+    },
+    closeDetails(){
+      this.showDetails = false;
+      this.showForm = false;
+    },
+  }
+}
+
 </script>
 
 <template>
-<h1>Parameters</h1>
+
+  <ParameterList
+      v-if="!showForm && !showDetails && !showUptForm"
+      :objects="objects"
+      @show-form="openForm"
+      @show-details="openDetails"
+      @refresh="getAllObjects"
+  />
+  <ParameterForm
+      v-if="showForm"
+      @add-input="addObject"
+      @cancel-form="closeForm"
+  />
+  <ParameterDetails
+      v-if="showDetails"
+      :id="selectedObject.id"
+      @cancel-details="closeDetails"
+      @delete="deleteObject"
+  />
+
 </template>
 
-<style scoped>
+<style>
 
 </style>

@@ -2,13 +2,13 @@
 import '@/assets/details.css'
 import '@/assets/buttons.css'
 import Delete from "@/components/Delete.vue";
-import ProcStatusUptForm from "@/components/ProcStatusUptForm.vue";
+import ParameterUptForm from "@/components/ParameterUptForm.vue";
 import axios from 'axios';
 
 
 export default{
-  name: "ProcStatusDetails",
-  components: {ProcStatusUptForm, Delete},
+  name: "ParameterDetails",
+  components: {ParameterUptForm, Delete},
   props: ['id'],
   created(){
     this.getDetailedObject();
@@ -25,15 +25,16 @@ export default{
       this.showForm = true;
     },
     async getDetailedObject(){
-      this.selectedObject = await axios.get(`http://localhost:23988/api/status/${this.id}`)
+      this.selectedObject = await axios.get(`http://localhost:23988/api/parameter/${this.id}`)
           .then(response => response.data)
           .catch(error => console.log(error));
     },
     async updateObject(updatedObject){
       this.selectedObject.name = updatedObject.name;
+      this.selectedObject.unit = updatedObject.unit;
       this.showForm= false;
       console.log(updatedObject);
-      await axios.post('http://localhost:23988/api/status/update', updatedObject)
+      await axios.post('http://localhost:23988/api/parameter/update', updatedObject)
           .then(response => response.data)
           .catch(error => console.log(error));
     }
@@ -44,18 +45,18 @@ export default{
 
 <template>
   <div v-if="selectedObject && !showForm">
-    <h1>Status details</h1>
+    <h1>Parameter details</h1>
     <p>Id: {{ selectedObject.id }}</p>
     <p>Name: {{ selectedObject.name }}</p>
-    <p>Processes:</p>
+    <p>Unit: {{ selectedObject.unit }}</p>
     <table class="listOfObjects">
       <tr>
         <th>Id</th>
-        <th>Serial number</th>
+        <th>Code</th>
       </tr>
-      <tr v-for="process in selectedObject.processes.$values" :key="process.id" data-test="process">
-        <td>{{ process.id }}</td>
-        <td>{{ process.serialNumber }}</td>
+      <tr v-for="processParam in selectedObject.processParameters.$values" :key="processParam.id" data-test="order">
+        <td>{{ processParam.id }}</td>
+        <td>{{ processParam.value }}</td>
       </tr>
     </table>
     <div class="buttons">
@@ -69,7 +70,7 @@ export default{
         @submit-delete="$emit('delete', selectedObject)"
     />
   </div>
-  <ProcStatusUptForm
+  <ParameterUptForm
       v-if="showForm"
       :selectedObject="selectedObject"
       @cancelForm="showForm = false"

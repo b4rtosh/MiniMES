@@ -4,14 +4,12 @@ import ProcStatusList from "@/components/ProcStatusList.vue";
 import ProcStatusDetails from "@/components/ProcStatusDetails.vue";
 import ProcStatusForm from "@/components/ProcStatusForm.vue";
 import '@/assets/all.css'
-import ProcStatusUptForm from "@/components/ProductUptForm.vue";
 export default {
   name: 'Statuses',
   components: {
     ProcStatusList,
     ProcStatusDetails,
     ProcStatusForm,
-    ProcStatusUptForm,
   },
   data(){
     return{
@@ -49,13 +47,7 @@ export default {
       this.closeForm();
       await this.getAllObjects();
     },
-    async updateObject(object){
-      console.log(object);
-      await axios.post('http://localhost:23988/api/product/update', object)
-          .then(response => response.data)
-          .catch(error => console.log('Error', error));
-      await this.getAllObjects();
-    },
+
     openForm(){
       this.showForm = true;
       this.showDetails = false;

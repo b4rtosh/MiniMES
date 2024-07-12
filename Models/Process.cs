@@ -9,7 +9,7 @@ public class Process
     public int StatusId { get; set; } // check it
 
     public ProcessStatus ProcessStatus { get; set; } = null!;
-    public DateTime CreatedTime { get; } = DateTime.Now;
+    public DateTime CreatedTime { get; set; } = DateTime.Now;
 
     public ICollection<ProcessParameter> ProcessParameters { get; set; } = null!;
 }

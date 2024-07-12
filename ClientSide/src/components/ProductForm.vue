@@ -1,7 +1,7 @@
 <script>
 import '@/assets/forms.css';
 export default{
-  name: 'MachineForm',
+  name: 'ProductForm',
   data(){
     return{
       localObject: {

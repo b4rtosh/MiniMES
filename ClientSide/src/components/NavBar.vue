@@ -20,6 +20,9 @@
    <li class="nav-item">
         <router-link to="/statuses" class="nav-link">Statuses</router-link>
       </li>
+      <li class="nav-item">
+        <router-link to="/processes" class="nav-link">Processes</router-link>
+      </li>
     </ul>
   </nav>
 

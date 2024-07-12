@@ -1,7 +1,7 @@
 <script>
 import '@/assets/forms.css';
 export default{
-  name: 'ProcStatusUptForm',
+  name: 'ParameterUptForm',
   props: {
     selectedObject: {
       type: Object,
@@ -25,7 +25,7 @@ export default{
 <template>
   <!--  add machine dialog which covers list -->
   <div>
-    <h1>Update Status</h1>
+    <h1>Update Parameter</h1>
     <form @submit.prevent="submitForm">
       <div>
         <label for="idInput">Id:</label>
@@ -33,7 +33,11 @@ export default{
       </div>
       <div>
         <label for="nameInput">Name:</label>
-        <input class="inputTxt" type="text" id="nameInput" pattern="[a-zA-Z\ ]+" v-model="localObject.name" required><br>
+        <input class="inputTxt" type="text" id="nameInput" v-model="localObject.name" pattern="[a-zA-Z\ ]" required><br>
+      </div>
+      <div>
+        <label for="unitInput">Unit:</label>
+        <input class="inputTxt" type="text" id="unitInput" v-model="localObject.unit" pattern="[a-zA-Z\ ]" required><br>
       </div>
       <div class='buttons'>
         <button type="submit">Update</button>

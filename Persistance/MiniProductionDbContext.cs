@@ -60,7 +60,9 @@ public class MiniProductionDbContext : DbContext
             entity.HasOne(d => d.Order)
                 .WithMany(p => p.Processes)
                 .HasForeignKey(d => d.OrderId);
-            entity.Property(e => e.StatusId);
+            entity.HasOne(d => d.ProcessStatus)
+                .WithMany(p => p.Processes)
+                .HasForeignKey(d => d.StatusId);
             entity.Property(e => e.CreatedTime);
         });
 
@@ -83,5 +85,13 @@ public class MiniProductionDbContext : DbContext
                 .WithMany(p => p.ProcessParameters)
                 .HasForeignKey(d => d.ParameterId);
         });
+
+        modelBuilder.Entity<ProcessStatus>(entity =>
+        {
+            entity.ToTable("ProcessStatuses", "MiniMes");
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.Name).HasMaxLength(50);
+        });
+
     }
 }

@@ -25,13 +25,14 @@ public class OrderController : Controller
             if (order.Code == "") throw new Exception("Code is required");
             if (!CheckStringNoSpaces(order.Code)) throw new Exception("Code is invalid");
             // how to validate machine id and product id and quantity
+            await _repo.CreateNew(order);
+            return Ok("Product added");
         }
         catch (Exception ex)
         {
             return BadRequest(ex.Message);
         }
-        await _repo.CreateNew(order);
-        return Ok("Product added");
+        
     }
 
     [HttpGet]
@@ -68,6 +69,7 @@ public class OrderController : Controller
     public async Task<IActionResult> UpdateOne([FromBody] Order updated)
     {
         var saved = await _repo.GetById(updated.Id);
+        if (saved == null) return BadRequest("Object not found");
         try
         {
             if (updated.Code != "")
@@ -80,13 +82,15 @@ public class OrderController : Controller
             if (updated.MachineId != saved.MachineId) saved.MachineId = updated.MachineId;
             if (updated.ProductId != saved.ProductId) saved.ProductId = updated.ProductId;
             if (updated.Quantity != saved.Quantity) saved.Quantity = updated.Quantity;
+            
+            await _repo.Update(saved);
+            return Ok($"Updated object:\n{saved}");
         }
         catch (Exception e)
         {
             return BadRequest(e.Message);
         }
 
-        await _repo.Update(saved);
-        return Ok($"Updated object:\n{saved}");
+      
     }
 }

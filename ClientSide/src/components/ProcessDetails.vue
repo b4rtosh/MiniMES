@@ -2,13 +2,13 @@
 import '@/assets/details.css'
 import '@/assets/buttons.css'
 import Delete from "@/components/Delete.vue";
-import OrderUptForm from "@/components/OrderUptForm.vue";
+import ProcessUptForm from "@/components/ProcessUptForm.vue";
 import axios from 'axios';
 
 
 export default{
-  name: "OrderDetails",
-  components: {OrderUptForm, Delete},
+  name: "ProcessDetails",
+  components: {ProcessUptForm, Delete},
   props: ['id'],
   created(){
     this.getDetailedObject();
@@ -25,18 +25,16 @@ export default{
       this.showForm = true;
     },
     async getDetailedObject(){
-      this.selectedObject = await axios.get(`http://localhost:23988/api/order/${this.id}`)
+      this.selectedObject = await axios.get(`http://localhost:23988/api/process/${this.id}`)
           .then(response => response.data)
           .catch(error => console.log(error));
-      console.log(this.selectedObject);
     },
     async updateObject(updatedObject){
-      this.selectedObject.code = updatedObject.code;
-      this.selectedObject.quantity = updatedObject.quantity;
-      this.selectedObject.machineId = updatedObject.machineId;
-      this.selectedObject.productId = updatedObject.productId;
+      this.selectedObject.serialNumer = updatedObject.serialNumber;
+      this.selectedObject.orderId = updatedObject.orderId;
+      this.selectedObject.statusId = updatedObject.statusId;
       this.showForm= false;
-      await axios.post('http://localhost:23988/api/order/update', updatedObject)
+      await axios.post('http://localhost:23988/api/process/update', updatedObject)
           .then(response => console.log(response.data))
           .catch(error => console.log(error));
       await this.getDetailedObject();
@@ -47,35 +45,35 @@ export default{
 
 <template>
   <div v-if="selectedObject && !showForm">
-    <h1>Order details</h1>
+    <h1>Process details</h1>
     <div id="details">
-    <div style="width: 70%">
-    <p>Id: {{ selectedObject.id }}</p>
-    <p>Code: {{ selectedObject.code }}</p>
-    <p>Quantity: {{ selectedObject.quantity }}</p>
+      <div style="width: 70%">
+        <p>Id: {{ selectedObject.id }}</p>
+        <p>Serial number: {{ selectedObject.serialNumber }}</p>
+        <p>Created time: {{ selectedObject.createdTime }}</p>
       </div>
     </div>
     <div class="parentDiv">
-    <div class="childDiv">
-      <h2>Machine</h2>
-      <p>Id: {{selectedObject.machine.id}}</p>
-      <p>Name: {{selectedObject.machine.name}}</p>
-    </div>
-      <div class="childDiv" >
-        <h2>Product</h2>
-        <p>Id: {{selectedObject.product.id}}</p>
-        <p>Code: {{selectedObject.product.code}}</p>
+      <div class="childDiv">
+        <h2>Status</h2>
+        <p>Id: {{selectedObject.processStatus.id}}</p>
+        <p>Name: {{selectedObject.processStatus.name}}</p>
       </div>
-      
+      <div class="childDiv">
+        <h2>Order</h2>
+        <p>Id: {{selectedObject.order.id}}</p>
+        <p>Code: {{selectedObject.order.code}}</p>
+      </div>
+
     </div>
     <table class="listOfObjects">
       <tr>
         <th>Id</th>
-        <th>Serial Number</th>
+        <th>Value</th>
       </tr>
-      <tr v-for="process in selectedObject.processes.$values" :key="process.id" data-test="process">
-        <td>{{ process.id }}</td>
-        <td>{{process.serialNumber}}</td>
+      <tr v-for="parameter in selectedObject.processParameters.$values" :key="parameter.id" data-test="parameter">
+        <td>{{ parameter.id }}</td>
+        <td>{{parameter.value}}</td>
       </tr>
     </table>
     <div class="buttons">
@@ -89,7 +87,7 @@ export default{
         @submit-delete="$emit('delete', selectedObject)"
     />
   </div>
-  <OrderUptForm
+  <ProcessUptForm
       v-if="showForm"
       :machine="selectedObject"
       @cancelForm="showForm = false"
