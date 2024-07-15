@@ -6,7 +6,7 @@ public static class Validation
 {
     public static bool CheckString(string? str)
     {
-        return Regex.IsMatch(str, @"\A(?!\s)[\w\ \,\.\;]+(?<!\s)\z");
+        return Regex.IsMatch(str, @"\A(?!\s)[\w\b\-]+(?<!\s)\z");
     }
 
     public static bool CheckStringNoSpaces(string str)

@@ -29,14 +29,8 @@ export default{
           .then(response => response.data)
           .catch(error => console.log(error));
     },
-    async updateObject(updatedObject) {
-      this.selectedObject.serialNumer = updatedObject.serialNumber;
-      this.selectedObject.orderId = updatedObject.orderId;
-      this.selectedObject.statusId = updatedObject.statusId;
+    async updateObject() {
       this.showForm = false;
-      await axios.post('http://localhost:23988/api/process/update', updatedObject)
-          .then(response => console.log(response.data))
-          .catch(error => console.log(error));
       await this.getDetailedObject();
     },
     async deleteObject() {
@@ -95,7 +89,7 @@ export default{
   </div>
   <ProcessUptForm
       v-if="showForm"
-      :machine="selectedObject"
+      :selectedObject="selectedObject"
       @cancelForm="showForm = false"
       @submitForm="updateObject"
   />

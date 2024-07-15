@@ -64,6 +64,7 @@ public class ProcessParamController : Controller
     public async Task<IActionResult> UpdateOne([FromBody] ProcessParameter updated)
     {
          var saved = await _repo.GetById(updated.Id);
+         if (saved == null) return BadRequest("Object not found");
         try
         {
             if (updated.ProcessId != saved.ProcessId) saved.ProcessId = updated.ProcessId;

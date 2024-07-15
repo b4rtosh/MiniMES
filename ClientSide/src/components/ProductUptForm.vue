@@ -29,15 +29,31 @@ export default{
     <form @submit.prevent="submitForm">
       <div>
         <label for="idInput">Id:</label>
-        <input class="inputTxt" type="text" id="idInput" v-model="localObject.id" disabled>
+        <input class="inputTxt" 
+               type="text"
+               id="idInput"
+               v-model="localObject.id"
+               disabled>
       </div>
       <div>
         <label for="codeInput">Code:</label>
-        <input class="inputTxt" type="text" id="codeInput" v-model="localObject.code" required><br>
+        <input class="inputTxt" 
+               type="text" 
+               id="codeInput"
+               v-model="localObject.code"
+               pattern="^(?!\s)[\w]+(?<!\s)$"
+               placeholder="Letters, digits"
+               required><br>
       </div>
       <div>
         <label for="descriptionInput">Description:</label>
-        <input class="inputTxt" type="text" id="descriptionInput" v-model="localObject.description" required><br>
+        <input class="inputTxt" 
+               type="text" 
+               id="descriptionInput" 
+               v-model="localObject.description"
+               pattern="^(?!\s)[\w ]+(?<!\s)$"
+               placeholder="Words, digits, backspaces"
+               required><br>
       </div>
       <div class='buttons'>
         <button type="submit">Update</button>

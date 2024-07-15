@@ -1,5 +1,6 @@
 <script>
 import '@/assets/forms.css';
+
 export default{
   name: 'MachineForm',
 data(){
@@ -25,11 +26,23 @@ methods:{
     <form @submit.prevent="submitForm">
       <div>
         <label for="nameInput">Name:</label>
-        <input class="inputTxt" type="text" id="nameInput" v-model="localObject.name" required><br>
+        <input class="inputTxt"
+               type="text"
+               id="nameInput"
+               v-model="localObject.name"
+               pattern="^(?!\s)[\w ]+(?<!\s)$"
+               placeholder="Words, digits, backspaces"
+               required><br>
       </div>
       <div>
         <label for="descriptionInput">Description:</label>
-        <input class="inputTxt" type="text" id="descriptionInput" v-model="localObject.description" required><br>
+        <input class="inputTxt" 
+               type="text" 
+               id="descriptionInput"
+               v-model="localObject.description"
+               pattern="^(?!\s)[\w ]+(?<!\s)$"
+               placeholder="Words, digits, backspaces"
+               required><br>
       </div>
       <div class='buttons'> 
         <button type="submit">Add</button>

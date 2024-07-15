@@ -76,8 +76,13 @@ export default {
     <form @submit.prevent="addObject">
       <div>
         <label for="serial-num-input">Serial number: </label>
-        <input class="inputTxt" type="text" id="serial-num-input" v-model="localObject.serialNumber"
-               pattern="[a-zA-Z0-9]+" required><br>
+        <input class="inputTxt" 
+               type="text" 
+               id="serial-num-input" 
+               v-model="localObject.serialNumber"
+               pattern="^(?!\s)[\w]+(?<!\s)$"
+               placeholder="Letters, digits"
+               required><br>
       </div>
       <div>
         <label for="order-select">Order: </label>
@@ -103,7 +108,13 @@ export default {
           </option>
         </select>
         <label style="margin-left: 10%" id="parameter-value-label" for="parameter-value">Value: </label>
-        <input class="inputTxt" id="parameter-value" type="number" v-model="x.value" required>
+        <input class="inputTxt" 
+               id="parameter-value" 
+               type="number" 
+               v-model="x.value"
+               pattern="^(?!\s)[\w]+(?<!\s)$"
+               placeholder="Number"
+               required>
       </div>
       <button id="addButton" type="button" @click="addedParameters.push({processId : 0})">
         +

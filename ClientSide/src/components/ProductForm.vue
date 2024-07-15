@@ -24,12 +24,24 @@ export default{
     <h1>Add Product</h1>
     <form @submit.prevent="submitForm">
       <div>
-        <label for="codeInput">Name:</label>
-        <input class="inputTxt" type="text" id="codeInput" v-model="localObject.code" required><br>
+        <label for="codeInput">Code:</label>
+        <input class="inputTxt" 
+               type="text" 
+               id="codeInput"
+               pattern="^(?!\s)[\w]+(?<!\s)$"
+               placeholder="Letters, digits"
+               v-model="localObject.code" 
+               required><br>
       </div>
       <div>
         <label for="descriptionInput">Description:</label>
-        <input class="inputTxt" type="text" id="descriptionInput" v-model="localObject.description" required><br>
+        <input class="inputTxt" 
+               type="text" 
+               id="descriptionInput"
+               v-model="localObject.description"
+               pattern="^(?!\s)[\w ]+(?<!\s)$"
+               placeholder="Words, digits, backspaces"
+               required><br>
       </div>
       <div class='buttons'>
         <button type="submit">Add</button>

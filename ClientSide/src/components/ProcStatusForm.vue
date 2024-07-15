@@ -25,7 +25,13 @@ export default{
     <form @submit.prevent="submitForm">
       <div>
         <label for="codeInput">Name:</label>
-        <input class="inputTxt" type="text" id="codeInput" v-model="localObject.name" pattern="[a-zA-Z\ ]+" required><br>
+        <input class="inputTxt" 
+               type="text" 
+               id="codeInput" 
+               v-model="localObject.name"
+               pattern="^(?!\s)[\w ]+(?<!\s)$"
+               placeholder="Words, digits, backspaces"
+               required><br>
       </div>
       <div class='buttons'>
         <button type="submit">Add</button>

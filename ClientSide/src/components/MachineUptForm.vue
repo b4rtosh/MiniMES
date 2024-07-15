@@ -29,11 +29,23 @@ methods: {
     <form @submit.prevent="submitForm">
       <div>
         <label for="nameInput">Name:</label>
-        <input class="inputTxt" type="text" id="nameInput" v-model="localMachine.name" required><br>
+        <input class="inputTxt" 
+               type="text" 
+               id="nameInput" 
+               v-model="localMachine.name"
+               pattern="^(?!\s)[\w ]+(?<!\s)$"
+               placeholder="Words, digits, backspaces"
+               required><br>
       </div>
       <div>
         <label for="descriptionInput">Description:</label>
-        <input class="inputTxt" type="text" id="descriptionInput" v-model="localMachine.description" required><br>
+        <input class="inputTxt" 
+               type="text" 
+               id="descriptionInput" 
+               v-model="localMachine.description"
+               pattern="^(?!\s)[\w ]+(?<!\s)$"
+               placeholder="Words, digits, backspaces"
+               required><br>
       </div>
       <div class='buttons'>
         <button type="submit">Update</button>

@@ -7,8 +7,8 @@ namespace MiniMesTrainApi.Repositories
 {
     public class DatabaseRepo<TEntity> where TEntity : class
     {
-        protected readonly DbContext _context;
-        protected readonly DbSet<TEntity> _dbset;
+        private readonly DbContext _context;
+        private readonly DbSet<TEntity> _dbset;
 
 
         public DatabaseRepo(DbContext context)
@@ -32,7 +32,12 @@ namespace MiniMesTrainApi.Repositories
         {
             return await _dbset.FindAsync(id);
         }
-
+        
+        public async Task<TEntity?> GetById(int id)
+        {
+            return await _dbset.FindAsync(id);
+        }
+        
         public async Task<List<TEntity>> GetAll()
         {
             return await _dbset.ToListAsync();

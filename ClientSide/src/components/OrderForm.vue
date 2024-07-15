@@ -44,11 +44,23 @@ export default{
     <form @submit.prevent="submitForm">
       <div>
         <label for="codeInput">Code: </label>
-        <input class="inputTxt" type="text" id="codeInput" v-model="localObject.code" required><br>
+        <input class="inputTxt" 
+               type="text" 
+               id="codeInput" 
+               v-model="localObject.code"
+               pattern="^(?!\s)[\w]+(?<!\s)$"
+               placeholder="Letters, digits"
+               required><br>
       </div>
       <div>
         <label for="quantityInput">Quantity: </label>
-        <input class="inputTxt" type="number" id="quantityInput" v-model="localObject.quantity" required><br>
+        <input class="inputTxt" 
+               type="number" 
+               id="quantityInput"
+               pattern="^(?!\s)[\w]+(?<!\s)$"
+               placeholder="Number"
+               v-model="localObject.quantity" 
+               required><br>
       </div>
       <div>
         <label for="machine-select">Machine Id: </label>
