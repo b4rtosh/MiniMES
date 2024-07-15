@@ -21,6 +21,7 @@ export default {
       showDetails: false,
       showUptForm: false,
       selectedObject: null,
+      route: 'http://localhost:23988/api/Machine'
     }
   },
   created(){
@@ -28,13 +29,13 @@ export default {
   },
   methods: {
     async getAllObjects(){
-      this.machines = await axios.get('http://localhost:23988/api/machine/all')
+      this.machines = await axios.get(`${this.route}/all`)
           .then(response => response.data.$values)
           .catch(error => console.log(error));
     },
     async addObject(newMachine){
       try {
-        await axios.put('http://localhost:23988/api/machine/add', newMachine)
+        await axios.put(`${this.route}/add`, newMachine)
         await this.getAllObjects();
         this.closeForm();
       } catch (error){
@@ -44,17 +45,10 @@ export default {
    
     async deleteObject(object){
       console.log(object);
-      await axios.delete(`http://localhost:23988/api/machine/delete/${object.id}`)
+      await axios.delete(`${this.route}/delete/int/${object.id}`)
           .then(response => response.data)
           .catch(error => console.log('Error', error));
       this.closeForm();
-      await this.getAllObjects();
-    },
-    async updateObject(object){
-      console.log(object);
-      await axios.post('http://localhost:23988/api/machine/update', object)
-          .then(response => response.data)
-          .catch(error => console.log('Error', error));
       await this.getAllObjects();
     },
     openForm(){
@@ -96,6 +90,7 @@ export default {
       <MachineDetails
         v-if="showDetails"
         :id="selectedObject.id"
+        :route="route"
         @cancel-details="closeDetails"
         @delete="deleteObject"
       />

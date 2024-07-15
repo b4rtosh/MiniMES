@@ -19,6 +19,7 @@ export default {
       showDetails: false,
       showUptForm: false,
       selectedObject: null,
+      route: 'http://localhost:23988/api/Order'
     }
   },
   created(){
@@ -26,13 +27,13 @@ export default {
   },
   methods: {
     async getAllObjects(){
-      this.objects = await axios.get('http://localhost:23988/api/order/all')
+      this.objects = await axios.get(`${this.route}/all`)
           .then(response => response.data.$values)
           .catch(error => console.log(error));
     },
     async addObject(newObject){
       try {
-        await axios.put('http://localhost:23988/api/order/add', newObject)
+        await axios.put(`${this.route}/add`, newObject)
         await this.getAllObjects();
         this.closeForm();
       } catch (error){
@@ -42,20 +43,13 @@ export default {
 
     async deleteObject(object){
       console.log(object);
-      await axios.delete(`http://localhost:23988/api/order/delete/${object.id}`)
+      await axios.delete(`${this.route}/delete/long/${object.id}`)
           .then(response => response.data)
           .catch(error => console.log('Error', error));
       this.closeForm();
       await this.getAllObjects();
     },
-    async updateObject(object){
-      console.log(object);
-      await axios.post('http://localhost:23988/api/order/update', object)
-          .then(response => response.data)
-          .catch(error => console.log('Error', error));
-      await this.getAllObjects();
-    },
-    openForm(){
+      openForm(){
       this.showForm = true;
       this.showDetails = false;
     },
@@ -95,6 +89,7 @@ export default {
       v-if="showDetails"
       :id="selectedObject.id"
       @cancel-details="closeDetails"
+      :route="route"
       @delete="deleteObject"
   />
 

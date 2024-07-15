@@ -6,49 +6,17 @@ using static MiniMesTrainApi.Models.Validation;
 
 namespace MiniMesTrainApi.Controllers;
 
-[Route("api/order")]
-public class OrderController : Controller
+public class OrderController : GenericController<Order>
 {
     private readonly DatabaseRepo<Order> _repo;
 
-    public OrderController(DatabaseRepo<Order> repo)
+    public OrderController(DatabaseRepo<Order> repo) : base(repo)
     {
         _repo = repo;
     }
-
-    [HttpPut]
-    [Route("add")]
-    public async Task<IActionResult> Add([FromBody] Order order)
+    
+    public override async Task<IActionResult> GetOne([FromRoute] long id)
     {
-        try
-        {
-            if (order.Code == "") throw new Exception("Code is required");
-            if (!CheckStringNoSpaces(order.Code)) throw new Exception("Code is invalid");
-            // how to validate machine id and product id and quantity
-            await _repo.CreateNew(order);
-            return Ok("Product added");
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        
-    }
-
-    [HttpGet]
-    [Route("all")]
-    public async Task<IActionResult> GetAll()
-    {
-        var orders = await _repo.GetAll();
-
-        return Ok(orders);
-    }
-
-    [HttpGet]
-    [Route("{id}")]
-    public async Task<IActionResult> GetOne([FromRoute] long id)
-    {
-        
         var order =  await _repo.GetByIdWithIncludes(x => x.Id == id, query => query
                 .Include(x => x.Machine)
                 .Include(x => x.Product)
@@ -56,17 +24,8 @@ public class OrderController : Controller
         return Ok(order);
     }
 
-    [HttpDelete]
-    [Route("delete/{id}")]
-    public async Task<IActionResult> DeleteOne([FromRoute] long id)
-    {
-       await _repo.DelById(id);
-        return Ok("Deleted product");
-    }
-
-    [HttpPost]
-    [Route("update")]
-    public async Task<IActionResult> UpdateOne([FromBody] Order updated)
+   
+    public override async Task<IActionResult> UpdateOne([FromBody] Order updated)
     {
         var saved = await _repo.GetById(updated.Id);
         if (saved == null) return BadRequest("Object not found");

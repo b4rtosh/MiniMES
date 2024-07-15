@@ -1,16 +1,20 @@
 <script>
 import '@/assets/forms.css';
 import axios from "axios";
-export default{
+
+export default {
   name: 'ProcessUptForm',
   props: {
-      selectedObject: {
+    selectedObject: {
       type: Object,
       default: null,
     },
+    route: {
+      type: String
+    }
   },
-  data(){
-    return{
+  data() {
+    return {
       localObject: {...this.selectedObject},
       orders: [],
       statuses: [],
@@ -25,52 +29,54 @@ export default{
     }
 
   },
-  created(){
+  created() {
     this.getAllOrders();
     this.getAllStatuses();
     this.getAllParameters();
     this.addParameters();
   },
   methods: {
-    addParameters(){
+    addParameters() {
       for (let i = 0; i < this.selectedObject.processParameters.$values.length; i++) {
         this.addedParameters.push({
-          id : this.selectedObject.processParameters.$values[i].id,
-          processId: this.selectedObject.id,
-          value: this.selectedObject.processParameters.$values[i].value,
-          parameterId: this.selectedObject.processParameters.$values[i].parameterId,
-        }
-      )
+              id: this.selectedObject.processParameters.$values[i].id,
+              processId: this.selectedObject.id,
+              value: this.selectedObject.processParameters.$values[i].value,
+              parameterId: this.selectedObject.processParameters.$values[i].parameterId,
+            }
+        )
       }
     },
     async getAllOrders() {
-      this.orders = await axios.get('http://localhost:23988/api/order/all')
+      this.orders = await axios.get('http://localhost:23988/api/Order/all')
           .then(response => response.data.$values)
           .catch(error => console.log(error));
     },
     async getAllStatuses() {
-      this.statuses = await axios.get('http://localhost:23988/api/status/all')
+      this.statuses = await axios.get('http://localhost:23988/api/Status/all')
           .then(response => response.data.$values)
           .catch(error => console.log(error));
     },
     async getAllParameters() {
-      this.parameters = await axios.get('http://localhost:23988/api/parameter/all')
+      this.parameters = await axios.get('http://localhost:23988/api/Param/all')
           .then(response => response.data.$values)
           .catch(error => console.log(error));
     },
-    async updateObject(){
+    async updateObject() {
       console.log('Update');
       try {
-        let response = await axios.post('http://localhost:23988/api/process/update', this.localObject);
+        let response = await axios.post(`${this.route}/update`, this.localObject);
         for (let i = 0; i < this.addedParameters.length; i++) {
           console.log(this.addedParameters[i]);
           try {
-            response = await axios.post('http://localhost:23988/api/processparam/update', this.addedParameters[i]);
+            response = await axios.post('http://localhost:23988/api/ProcessParam/update', this.addedParameters[i]);
             console.log('Reponse', response.data);
-          }catch (paramError){console.log(`Error adding parameter ${i + 1}`, paramError.response ? paramError.response.data : paramError.message)}
+          } catch (paramError) {
+            console.log(`Error adding parameter ${i + 1}`, paramError.response ? paramError.response.data : paramError.message)
+          }
         }
         this.$emit('submitForm');
-      }catch (error) {
+      } catch (error) {
         console.log('Error', error);
       }
     },
@@ -86,9 +92,9 @@ export default{
     <form @submit.prevent="updateObject">
       <div>
         <label for="serial-num-input">Serial number: </label>
-        <input class="inputTxt" 
-               type="text" 
-               id="serial-num-input" 
+        <input class="inputTxt"
+               type="text"
+               id="serial-num-input"
                v-model="localObject.serialNumber"
                pattern="^(?!\s)[\w]+(?<!\s)$"
                placeholder="Letters, digits"
@@ -118,17 +124,17 @@ export default{
           </option>
         </select>
         <label style="margin-left: 10%" id="parameter-value-label" for="parameter-value">Value: </label>
-        <input class="inputTxt" 
-               id="parameter-value" 
-               type="number" 
+        <input class="inputTxt"
+               id="parameter-value"
+               type="number"
                v-model="x.value"
                pattern="^(?!\s)[\w]+(?<!\s)$"
                placeholder="Number"
                required>
       </div>
-<!--      <button id="addButton" type="button" @click="addedParameters.push({processId : this.localObject.id})">-->
-<!--        +-->
-<!--      </button>-->
+      <!--      <button id="addButton" type="button" @click="addedParameters.push({processId : this.localObject.id})">-->
+      <!--        +-->
+      <!--      </button>-->
       <div class='buttons'>
         <button type="submit">Save</button>
         <button type="reset" @click="$emit('cancelForm')">Cancel</button>

@@ -9,7 +9,7 @@ import axios from 'axios';
 export default{
   name: "ProcessDetails",
   components: {ProcessUptForm, Delete},
-  props: ['id'],
+  props: ['id', 'route'],
   created(){
     this.getDetailedObject();
   },
@@ -25,7 +25,7 @@ export default{
       this.showForm = true;
     },
     async getDetailedObject() {
-      this.selectedObject = await axios.get(`http://localhost:23988/api/process/${this.id}`)
+      this.selectedObject = await axios.get(`${this.route}/int/${this.id}`)
           .then(response => response.data)
           .catch(error => console.log(error));
     },
@@ -34,7 +34,7 @@ export default{
       await this.getDetailedObject();
     },
     async deleteObject() {
-      await axios.delete(`http://localhost:23988/api/process/delete/${this.selectedObject.id}`)
+      await axios.delete(`${this.route}/delete/int/${this.selectedObject.id}`)
           .then(response => response.data)
           .catch(error => console.log('Error', error));
       this.$emit('delete');
@@ -92,6 +92,7 @@ export default{
       :selectedObject="selectedObject"
       @cancelForm="showForm = false"
       @submitForm="updateObject"
+      :route="route"
   />
 </template>
 

@@ -24,12 +24,12 @@ export default{
       this.$emit('add-input', this.localObject);
     },
     async getAllMachines(){
-      this.machines = await axios.get('http://localhost:23988/api/machine/all')
+      this.machines = await axios.get('http://localhost:23988/api/Machine/all')
           .then(response => response.data.$values)
           .catch(error => console.log(error));
     },
     async getAllProducts(){
-      this.products = await axios.get('http://localhost:23988/api/product/all')
+      this.products = await axios.get('http://localhost:23988/api/Product/all')
           .then(response => response.data.$values)
           .catch(error => console.log(error));
     },

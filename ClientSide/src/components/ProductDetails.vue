@@ -9,7 +9,7 @@ import axios from 'axios';
 export default{
   name: "ProductDetails",
   components: {ProductUptForm, Delete},
-  props: ['id'],
+  props: ['id', 'route'],
   created(){
     this.getDetailedObject();
   },
@@ -25,7 +25,7 @@ export default{
       this.showForm = true;
     },
     async getDetailedObject(){
-      this.selectedObject = await axios.get(`http://localhost:23988/api/product/${this.id}`)
+      this.selectedObject = await axios.get(`${this.route}/int/${this.id}`)
           .then(response => response.data)
           .catch(error => console.log(error));
     },
@@ -34,7 +34,7 @@ export default{
       this.selectedObject.description = updatedObject.description;
       this.showForm= false;
       console.log(updatedObject);
-      await axios.post('http://localhost:23988/api/product/update', updatedObject)
+      await axios.post(`${this.route}/int/update`, updatedObject)
           .then(response => response.data)
           .catch(error => console.log(error));
     }

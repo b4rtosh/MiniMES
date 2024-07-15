@@ -3,6 +3,7 @@ import '@/assets/forms.css';
 import axios from "axios";
 
 export default {
+  props: ['route'],
   name: 'ProcessForm',
   data() {
     return {
@@ -29,24 +30,24 @@ export default {
       
     },
     async getAllOrders() {
-      this.orders = await axios.get('http://localhost:23988/api/order/all')
+      this.orders = await axios.get('http://localhost:23988/api/Order/all')
           .then(response => response.data.$values)
           .catch(error => console.log(error));
     },
     async getAllStatuses() {
-      this.statuses = await axios.get('http://localhost:23988/api/status/all')
+      this.statuses = await axios.get('http://localhost:23988/api/Status/all')
           .then(response => response.data.$values)
           .catch(error => console.log(error));
     },
     async getAllParameters() {
-      this.parameters = await axios.get('http://localhost:23988/api/parameter/all')
+      this.parameters = await axios.get('http://localhost:23988/api/Param/all')
           .then(response => response.data.$values)
           .catch(error => console.log(error));
     },
     async addObject(){
       try {
         console.log();
-        let response = await axios.put('http://localhost:23988/api/process/add', this.localObject)
+        let response = await axios.put(`${this.route}/add`, this.localObject)
             .then(x => x.data);
         const processId = response.id;
         if (!response.id) {throw new Error('Process ID not found');}
@@ -55,8 +56,7 @@ export default {
           this.addedParameters[i].processId = processId;
           console.log(`Sending PUT request to add process parameter ${i + 1}`, this.addedParameters[i]);
           try {
-            response = await axios.put('http://localhost:23988/api/processparam/add', this.addedParameters[i]);
-            console.log('Reponse', response);
+            response = await axios.put('http://localhost:23988/api/ProcessParam/add', this.addedParameters[i]);
           }catch (paramError){console.log(`Error adding parameter ${i + 1}`, paramError.response ? paramError.response.data : paramError.message)}
         }
         this.$emit('add-input');

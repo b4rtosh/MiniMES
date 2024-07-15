@@ -1,31 +1,31 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using MiniMesTrainApi.Models;
 using MiniMesTrainApi.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace MiniMesTrainApi.Controllers;
 
-public class StatusController : GenericController<ProcessStatus>
+public class ParamController : GenericController<Parameter>
 {
-    private readonly DatabaseRepo<ProcessStatus> _repo;
+    private readonly DatabaseRepo<Parameter> _repo;
 
-    public StatusController(DatabaseRepo<ProcessStatus> repo) : base(repo)
+    public ParamController(DatabaseRepo<Parameter> repo) : base(repo)
     {
         _repo = repo;
     }
 
     public override async Task<IActionResult> GetOne([FromRoute] int id)
     {
-        var status = await _repo.GetByIdWithIncludes(x => x.Id == id,
+        var parameter = await _repo.GetByIdWithIncludes(x => x.Id == id,
             query => query
-                .Include(m => m.Processes));
-        return Ok(status);
+                .Include(m => m.ProcessParameters));
+        return Ok(parameter);
     }
 
-    public override async Task<IActionResult> UpdateOne([FromBody] ProcessStatus updated)
+    public override async Task<IActionResult> UpdateOne([FromBody] Parameter updated)
     {
         var saved = await _repo.GetById(updated.Id);
-        if (saved == null) return BadRequest("Object not found");
+        if (saved == null) return NotFound("Parameter not found");
         try
         {
             if (updated.Name != "")
@@ -34,6 +34,13 @@ public class StatusController : GenericController<ProcessStatus>
                     saved.Name = updated.Name;
                 else throw new Exception("Provided name was invalid");
             }
+
+            if (updated.Unit != null)
+            {
+                if (Validation.CheckString(updated.Unit))
+                    saved.Unit = updated.Unit;
+                else throw new Exception("Provided description was invalid");
+            }
             await _repo.Update(saved);
             return Ok($"Updated object:\n{saved}");
         }
@@ -41,5 +48,7 @@ public class StatusController : GenericController<ProcessStatus>
         {
             return BadRequest(e.Message);
         }
+
+        
     }
 }

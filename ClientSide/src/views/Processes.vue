@@ -19,6 +19,7 @@ export default {
       showDetails: false,
       showUptForm: false,
       selectedObject: null,
+      route: 'http://localhost:23988/api/Process'
     }
   },
   created() {
@@ -26,7 +27,7 @@ export default {
   },
   methods: {
     async getAllObjects() {
-      this.objects = await axios.get('http://localhost:23988/api/process/all')
+      this.objects = await axios.get(`${this.route}/all`)
           .then(response => response.data.$values)
           .catch(error => console.log(error));
     },
@@ -74,12 +75,14 @@ export default {
       v-if="showForm"
       @add-input="addObject"
       @cancel-form="closeForm"
+      :route="route"
   />
   <ProcessDetails
       v-if="showDetails"
       :id="selectedObject.id"
       @cancel-details="closeDetails"
       @delete="deleteObject"
+      :route="route"
   />
 
 </template>

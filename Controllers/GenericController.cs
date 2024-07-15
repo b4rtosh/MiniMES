@@ -14,6 +14,7 @@ namespace MiniMesTrainApi.Controllers
         }
         
         [HttpPut]
+        [Route("add")]
         public async Task<IActionResult> Add ([FromBody] TEntity instance){
             try
             {
@@ -35,15 +36,23 @@ namespace MiniMesTrainApi.Controllers
         }
         
         [HttpDelete]
-        [Route("delete/{id}")]
+        [Route("delete/int/{id}")]
         public async Task<IActionResult> DeleteOne([FromRoute] int id)
         {
             await _repo.DelById(id);
             return Ok("Deleted instance");
         }
         
+        [HttpDelete]
+        [Route("delete/long/{id}")]
+        public async Task<IActionResult> DeleteOne([FromRoute] long id)
+        {
+            await _repo.DelById(id);
+            return Ok("Deleted instance");
+        }
+        
         [HttpGet]
-        [Route("{id}")]
+        [Route("int/{id}")]
         public virtual async Task<IActionResult> GetOne([FromRoute] int id)
         {
             var instance = await _repo.GetById(id);
@@ -51,7 +60,7 @@ namespace MiniMesTrainApi.Controllers
         }
         
         [HttpGet]
-        [Route("{id}")]
+        [Route("long/{id}")]
         public virtual async Task<IActionResult> GetOne([FromRoute] long id)
         {
             var instance = await _repo.GetById(id);
@@ -60,7 +69,7 @@ namespace MiniMesTrainApi.Controllers
         
         [HttpPost]
         [Route("update")]
-        public async Task<IActionResult> UpdateOne([FromBody] TEntity updated)
+        public virtual async Task<IActionResult> UpdateOne([FromBody] TEntity updated)
         {
 
            await _repo.Update(updated);

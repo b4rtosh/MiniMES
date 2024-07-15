@@ -9,7 +9,7 @@ import axios from 'axios';
 export default{
   name: "MachineDetails",
   components: {MachineUptForm, Delete},
-  props: ['id'],
+  props: ['id', 'route'],
   created(){
     this.getDetailedObject();
   },
@@ -25,7 +25,7 @@ export default{
       this.showForm = true;
     },
     async getDetailedObject(){
-      this.selectedObject = await axios.get(`http://localhost:23988/api/machine/${this.id}`)
+      this.selectedObject = await axios.get(`${this.route}/int/${this.id}`)
           .then(response => response.data)
           .catch(error => console.log(error));
     },
@@ -33,7 +33,7 @@ export default{
       this.selectedObject.name = updatedObject.name;
       this.selectedObject.description = updatedObject.description;
       this.showForm= false;
-      await axios.post('http://localhost:23988/api/machine/update', updatedObject)
+      await axios.post(`${this.route}/update`, updatedObject)
           .then(response => console.log(response.data))
           .catch(error => console.log(error));
     }

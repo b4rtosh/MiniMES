@@ -21,6 +21,7 @@ export default {
       showDetails: false,
       showUptForm: false,
       selectedObject: null,
+      route: 'http://localhost:23988/api/Product'
     }
   },
   created(){
@@ -28,13 +29,13 @@ export default {
   },
   methods: {
     async getAllObjects(){
-      this.objects = await axios.get('http://localhost:23988/api/product/all')
+      this.objects = await axios.get(`${this.route}/all`)
           .then(response => response.data.$values)
           .catch(error => console.log(error));
     },
     async addObject(newObject){
       try {
-        await axios.put('http://localhost:23988/api/product/add', newObject)
+        await axios.put(`${this.route}/add`, newObject)
         await this.getAllObjects();
         this.closeForm();
       } catch (error){
@@ -44,17 +45,10 @@ export default {
 
     async deleteObject(object){
       console.log(object);
-      await axios.delete(`http://localhost:23988/api/product/delete/${object.id}`)
+      await axios.delete(`${this.route}/delete/int/${object.id}`)
           .then(response => response.data)
           .catch(error => console.log('Error', error));
       this.closeForm();
-      await this.getAllObjects();
-    },
-    async updateObject(object){
-      console.log(object);
-      await axios.post('http://localhost:23988/api/product/update', object)
-          .then(response => response.data)
-          .catch(error => console.log('Error', error));
       await this.getAllObjects();
     },
     openForm(){
@@ -98,6 +92,7 @@ export default {
       :id="selectedObject.id"
       @cancel-details="closeDetails"
       @delete="deleteObject"
+      :route="route"
   />
 
 </template>

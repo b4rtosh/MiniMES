@@ -9,7 +9,7 @@ import axios from 'axios';
 export default{
   name: "OrderDetails",
   components: {OrderUptForm, Delete},
-  props: ['id'],
+  props: ['id', 'route'],
   created(){
     this.getDetailedObject();
   },
@@ -25,7 +25,7 @@ export default{
       this.showForm = true;
     },
     async getDetailedObject(){
-      this.selectedObject = await axios.get(`http://localhost:23988/api/order/${this.id}`)
+      this.selectedObject = await axios.get(`${this.route}/long/${this.id}`)
           .then(response => response.data)
           .catch(error => console.log(error));
       console.log(this.selectedObject);
@@ -36,7 +36,7 @@ export default{
       this.selectedObject.machineId = updatedObject.machineId;
       this.selectedObject.productId = updatedObject.productId;
       this.showForm= false;
-      await axios.post('http://localhost:23988/api/order/update', updatedObject)
+      await axios.post(`${this.id}/update`, updatedObject)
           .then(response => console.log(response.data))
           .catch(error => console.log(error));
       await this.getDetailedObject();

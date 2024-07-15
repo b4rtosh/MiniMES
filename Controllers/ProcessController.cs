@@ -5,46 +5,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MiniMesTrainApi.Controllers;
 
-[Route("api/process")]
-public class ProcessController : Controller
+public class ProcessController : GenericController<Process>
 {
     private readonly DatabaseRepo<Process> _repo;
 
-    public ProcessController(DatabaseRepo<Process> repo)
+    public ProcessController(DatabaseRepo<Process> repo) : base(repo)
     {
         _repo = repo;
     }
 
-    [HttpPut]
-    [Route("add")]
-    public async Task<IActionResult> Add([FromBody] Process process)
-    {
-        try
-        {
-            if (process.SerialNumber == "") throw new Exception("SerialNumber is required");
-            if (!Validation.CheckStringNoSpaces(process.SerialNumber)) throw new Exception("Code is invalid");
-            
-            process = await _repo.CreateNew(process);
-            return Ok(process);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
-
-    [HttpGet]
-    [Route("all")]
-    public async Task<IActionResult> GetAll()
-    {
-        var processes = await _repo.GetAll();
-
-        return Ok(processes);
-    }
-
-    [HttpGet]
-    [Route("{id}")]
-    public async Task<IActionResult> GetOne([FromRoute] int id)
+    public override async Task<IActionResult> GetOne([FromRoute] int id)
     {
         var process = await _repo.GetByIdWithIncludes(x => x.Id == id,
             query => query
@@ -55,17 +25,7 @@ public class ProcessController : Controller
         return Ok(process);
     }
 
-    [HttpDelete]
-    [Route("delete/{id}")]
-    public async Task<IActionResult> DeleteOne([FromRoute] int id)
-    {
-        await _repo.DelById(id);
-        return Ok("Deleted product");
-    }
-
-    [HttpPost]
-    [Route("update")]
-    public async Task<IActionResult> UpdateOne([FromBody] Process updated)
+    public override async Task<IActionResult> UpdateOne([FromBody] Process updated)
     {
         var saved = await _repo.GetById(updated.Id);
         if (saved == null) return BadRequest("Object not found");
@@ -88,7 +48,5 @@ public class ProcessController : Controller
         {
             return BadRequest(e.Message);
         }
-
-        
     }
 }

@@ -5,49 +5,18 @@ using MiniMesTrainApi.Repositories;
 
 namespace MiniMesTrainApi.Controllers;
 
-// [ApiController]
-[Route("/api/machine/")]
-public class MachineController : Controller
+
+public class MachineController : GenericController<Machine>
 {
     private readonly DatabaseRepo<Machine> _repo;
 
-    public MachineController(DatabaseRepo<Machine> repo)
+    public MachineController(DatabaseRepo<Machine> repo) : base(repo)
     {
         _repo = repo;
     }
-
-    [HttpPut]
-    [Route("add")]
-    public async Task<IActionResult> Add([FromBody] Machine machine)
-    {
-        try
-        {
-            if (machine.Name == "") throw new Exception("Name is required");
-            if (!Validation.CheckString(machine.Name)) throw new Exception("Name is invalid");
-            if (machine.Description == null) throw new Exception("Description is required");
-            if (!Validation.CheckString(machine.Description)) throw new Exception("Description is invalid");
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-
-        await _repo.CreateNew(machine);
-        return Ok(machine);
-    }
-
-    [HttpGet]
-    [Route("all")]
-    public async Task<IActionResult> GetAll()
-    {
-        var machines = await _repo.GetAll();
-        return Ok(machines);
-    }
-
-
-    [HttpGet]
-    [Route("{id}")]
-    public async Task<IActionResult> GetOne([FromRoute] int id)
+    
+   
+    public override async Task<IActionResult> GetOne([FromRoute] int id)
     {
            var machine = await _repo.GetByIdWithIncludes(x => x.Id == id,
                 query => query
@@ -56,18 +25,8 @@ public class MachineController : Controller
 
         return Ok(machine);
     }
-    
-    [HttpDelete]
-    [Route("delete/{id}")]
-    public async Task<IActionResult> DeleteOne([FromRoute] int id)
-    {
-        await _repo.DelById(id);
-        return Ok("Deleted machine");
-    }
 
-    [HttpPost]
-    [Route("update")]
-    public async Task<IActionResult> UpdateOne([FromBody] Machine updated)
+    public override async Task<IActionResult> UpdateOne([FromBody] Machine updated)
     {
         var saved = await _repo.GetById(updated.Id);
         if (saved == null) return NotFound("Machine not found");

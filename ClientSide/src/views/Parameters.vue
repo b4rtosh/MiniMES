@@ -18,6 +18,7 @@ export default {
       showDetails: false,
       showUptForm: false,
       selectedObject: null,
+      route: 'http://localhost:23988/api/Param'
     }
   },
   created(){
@@ -25,13 +26,15 @@ export default {
   },
   methods: {
     async getAllObjects(){
-      this.objects = await axios.get('http://localhost:23988/api/parameter/all')
+      this.objects = await axios.get(`${this.route}/all`)
           .then(response => response.data.$values)
           .catch(error => console.log(error));
     },
     async addObject(newObject){
       try {
-        await axios.put('http://localhost:23988/api/parameter/add', newObject)
+        let response = await axios.put(`${this.route}/add`, newObject)
+            .then(x => x.data);
+        console.log(response);
         await this.getAllObjects();
         this.closeForm();
       } catch (error){
@@ -41,7 +44,7 @@ export default {
 
     async deleteObject(object){
       console.log(object);
-      await axios.delete(`http://localhost:23988/api/parameter/delete/${object.id}`)
+      await axios.delete(`${this.route}/delete/int/${object.id}`)
           .then(response => response.data)
           .catch(error => console.log('Error', error));
       this.closeForm();
@@ -88,6 +91,7 @@ export default {
       :id="selectedObject.id"
       @cancel-details="closeDetails"
       @delete="deleteObject"
+      :route="route"
   />
 
 </template>
