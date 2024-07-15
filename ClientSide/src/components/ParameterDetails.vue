@@ -49,14 +49,17 @@ export default{
     <p>Id: {{ selectedObject.id }}</p>
     <p>Name: {{ selectedObject.name }}</p>
     <p>Unit: {{ selectedObject.unit }}</p>
+      <h2>Process parameters:</h2>
     <table class="listOfObjects">
       <tr>
         <th>Id</th>
-        <th>Code</th>
+        <th>Value</th>
+        <th>Process Id:</th>
       </tr>
       <tr v-for="processParam in selectedObject.processParameters.$values" :key="processParam.id" data-test="order">
         <td>{{ processParam.id }}</td>
         <td>{{ processParam.value }}</td>
+        <td>{{ processParam.processId }}</td>
       </tr>
     </table>
     <div class="buttons">

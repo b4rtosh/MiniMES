@@ -68,6 +68,7 @@ export default{
       </div>
       
     </div>
+    <h2>Processes:</h2>
     <table class="listOfObjects">
       <tr>
         <th>Id</th>

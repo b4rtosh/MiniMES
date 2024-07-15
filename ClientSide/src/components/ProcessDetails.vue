@@ -20,25 +20,31 @@ export default{
       selectedObject: null,
     }
   },
-  methods:{
-    openForm(){
+  methods: {
+    openForm() {
       this.showForm = true;
     },
-    async getDetailedObject(){
+    async getDetailedObject() {
       this.selectedObject = await axios.get(`http://localhost:23988/api/process/${this.id}`)
           .then(response => response.data)
           .catch(error => console.log(error));
     },
-    async updateObject(updatedObject){
+    async updateObject(updatedObject) {
       this.selectedObject.serialNumer = updatedObject.serialNumber;
       this.selectedObject.orderId = updatedObject.orderId;
       this.selectedObject.statusId = updatedObject.statusId;
-      this.showForm= false;
+      this.showForm = false;
       await axios.post('http://localhost:23988/api/process/update', updatedObject)
           .then(response => console.log(response.data))
           .catch(error => console.log(error));
       await this.getDetailedObject();
-    }
+    },
+    async deleteObject() {
+      await axios.delete(`http://localhost:23988/api/process/delete/${this.selectedObject.id}`)
+          .then(response => response.data)
+          .catch(error => console.log('Error', error));
+      this.$emit('delete');
+    },
   }
 }
 </script>
@@ -47,7 +53,7 @@ export default{
   <div v-if="selectedObject && !showForm">
     <h1>Process details</h1>
     <div id="details">
-      <div style="width: 70%">
+      <div style="width: 80%">
         <p>Id: {{ selectedObject.id }}</p>
         <p>Serial number: {{ selectedObject.serialNumber }}</p>
         <p>Created time: {{ selectedObject.createdTime }}</p>
@@ -64,8 +70,8 @@ export default{
         <p>Id: {{selectedObject.order.id}}</p>
         <p>Code: {{selectedObject.order.code}}</p>
       </div>
-
     </div>
+    <h2>Parameters:</h2>
     <table class="listOfObjects">
       <tr>
         <th>Id</th>
@@ -84,7 +90,7 @@ export default{
     <Delete
         v-if="showDelete"
         @cancel-delete="showDelete = false"
-        @submit-delete="$emit('delete', selectedObject)"
+        @submit-delete="deleteObject"
     />
   </div>
   <ProcessUptForm

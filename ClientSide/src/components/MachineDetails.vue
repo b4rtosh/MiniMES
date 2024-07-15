@@ -48,14 +48,17 @@ export default{
     <p>Id: {{ selectedObject.id }}</p>
     <p>Name: {{ selectedObject.name }}</p>
     <p>Description: {{ selectedObject.description }}</p>
+    <h2>Orders:</h2>
     <table class="listOfObjects">
       <tr>
         <th>Id</th>
         <th>Code</th>
+        <th>Quantity</th>
       </tr>
           <tr v-for="order in selectedObject.orders.$values" :key="order.id" data-test="order">
             <td>{{ order.id }}</td>
             <td>{{ order.code }}</td>
+            <td>{{ order.quantity }}</td>
           </tr>
     </table>
     <div class="buttons">

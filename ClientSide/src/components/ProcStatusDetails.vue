@@ -47,15 +47,17 @@ export default{
     <h1>Status details</h1>
     <p>Id: {{ selectedObject.id }}</p>
     <p>Name: {{ selectedObject.name }}</p>
-    <p>Processes:</p>
+    <h2>Processes:</h2>
     <table class="listOfObjects">
       <tr>
         <th>Id</th>
         <th>Serial number</th>
+        <th>Order Id</th>
       </tr>
       <tr v-for="process in selectedObject.processes.$values" :key="process.id" data-test="process">
         <td>{{ process.id }}</td>
         <td>{{ process.serialNumber }}</td>
+        <td>{{ process.orderId }}</td>
       </tr>
     </table>
     <div class="buttons">

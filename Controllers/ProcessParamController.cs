@@ -22,8 +22,8 @@ public class ProcessParamController : Controller
         try
         {
             if (processParam.Value == 0) throw new Exception("Value is required");
-            await _repo.CreateNew(processParam);
-            return Ok("Process added");
+            var response = await _repo.CreateNew(processParam);
+            return Ok(response);
         }
         catch (Exception ex)
         {
@@ -53,7 +53,7 @@ public class ProcessParamController : Controller
 
     [HttpDelete]
     [Route("delete/{id}")]
-    public async Task<IActionResult> DeleteOne([FromBody] int id)
+    public async Task<IActionResult> DeleteOne([FromRoute] int id)
     {
         await _repo.DelById(id);
         return Ok("Deleted process processPara");

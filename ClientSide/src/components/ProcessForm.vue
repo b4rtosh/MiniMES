@@ -26,7 +26,7 @@ export default {
   methods: {
     submitForm() {
       console.log(this.addedParameters);
-      this.$emit('add-input', {process: this.localObject, parameters: this.addedParameters});
+      
     },
     async getAllOrders() {
       this.orders = await axios.get('http://localhost:23988/api/order/all')
@@ -43,7 +43,28 @@ export default {
           .then(response => response.data.$values)
           .catch(error => console.log(error));
     },
-  }
+    async addObject(){
+      try {
+        console.log();
+        let response = await axios.put('http://localhost:23988/api/process/add', this.localObject)
+            .then(x => x.data);
+        const processId = response.id;
+        if (!response.id) {throw new Error('Process ID not found');}
+        
+        for (let i = 0; i < this.addedParameters.length; i++) {
+          this.addedParameters[i].processId = processId;
+          console.log(`Sending PUT request to add process parameter ${i + 1}`, this.addedParameters[i]);
+          try {
+            response = await axios.put('http://localhost:23988/api/processparam/add', this.addedParameters[i]);
+            console.log('Reponse', response);
+          }catch (paramError){console.log(`Error adding parameter ${i + 1}`, paramError.response ? paramError.response.data : paramError.message)}
+        }
+        this.$emit('add-input');
+      }catch (error) {
+        console.log('Error', error);
+      }
+    },
+  },
 }
 
 </script>
@@ -52,7 +73,7 @@ export default {
   <!--  add machine dialog which covers list -->
   <div>
     <h1>Add Process</h1>
-    <form @submit.prevent="submitForm">
+    <form @submit.prevent="addObject">
       <div>
         <label for="serial-num-input">Serial number: </label>
         <input class="inputTxt" type="text" id="serial-num-input" v-model="localObject.serialNumber"

@@ -12,8 +12,8 @@ export default {
     ProcessDetails,
     ProcessForm,
   },
-  data(){
-    return{
+  data() {
+    return {
       objects: [],
       showForm: false,
       showDetails: false,
@@ -21,61 +21,43 @@ export default {
       selectedObject: null,
     }
   },
-  created(){
+  created() {
     this.getAllObjects();
   },
   methods: {
-    async getAllObjects(){
+    async getAllObjects() {
       this.objects = await axios.get('http://localhost:23988/api/process/all')
           .then(response => response.data.$values)
           .catch(error => console.log(error));
     },
-    async addObject(newObject){
-      try {
-        console.log(newObject);
-        let response = await axios.put('http://localhost:23988/api/process/add', newObject.process)
-            .then(x => x.data);
-        console.log(response.id);
-        for (let i = 0; i < Object.keys(newObject.parameters.length); i++) {
-          newObject.parameters[i].processId = response.id;
-          
-          response = await axios.put('http://localhost:23988/api/processparam/add', newObject.parameters[i])
-          console.log('Added parameter', response.data);
-        }
-        await this.getAllObjects();
-        this.closeForm();
-      } catch (error){
-        console.log('Error', error);
-      }
-    },
-
-    async deleteObject(object){
-      console.log(object);
-      await axios.delete(`http://localhost:23988/api/process/delete/${object.id}`)
-          .then(response => response.data)
-          .catch(error => console.log('Error', error));
+    async addObject() {
       this.closeForm();
       await this.getAllObjects();
     },
-    openForm(){
+    openForm() {
       this.showForm = true;
       this.showDetails = false;
     },
-    closeForm(){
+    closeForm() {
       this.showForm = false;
       this.showDetails = false;
     },
-    openDetails(object){
+    openDetails(object) {
       this.selectedObject = object;
       this.showDetails = true;
       this.showForm = false;
     },
-    closeDetails(){
+    closeDetails() {
       this.showDetails = false;
       this.showForm = false;
     },
+    async deleteObject(){
+      this.closeForm();
+      await this.getAllObjects();
+    },
   }
 }
+
 
 </script>
 
