@@ -32,17 +32,19 @@ public class ProductController : GenericController<Product>
         {
             if (updated.Code != "")
             {
-                if (Validation.CheckString(updated.Code))
-                    saved.Code = updated.Code;
-                else throw new Exception("Provided name was invalid");
+                if (saved.Code != updated.Code) saved.Code = updated.Code;
+                
             }
-
+            else throw new Exception("Provided name was invalid");
+            
             if (updated.Description != null)
             {
-                if (Validation.CheckString(updated.Description))
+                if (saved.Description != updated.Description)
+                {
                     saved.Description = updated.Description;
-                else throw new Exception("Provided description was invalid");
+                }
             }
+            else throw new Exception("Provided description was invalid");
             await _repo.Update(saved);
             return Ok($"Updated object:\n{saved}");
         }

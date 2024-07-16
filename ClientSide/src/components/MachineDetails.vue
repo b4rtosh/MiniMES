@@ -30,6 +30,7 @@ export default{
           .catch(error => console.log(error));
     },
     async updateObject(updatedObject){
+      console.log(updatedObject);
       this.selectedObject.name = updatedObject.name;
       this.selectedObject.description = updatedObject.description;
       this.showForm= false;
@@ -37,7 +38,6 @@ export default{
           .then(response => console.log(response.data))
           .catch(error => console.log(error));
     }
-  
   }
 }
 </script>

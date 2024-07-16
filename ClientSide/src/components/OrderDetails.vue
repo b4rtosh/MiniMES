@@ -36,7 +36,7 @@ export default{
       this.selectedObject.machineId = updatedObject.machineId;
       this.selectedObject.productId = updatedObject.productId;
       this.showForm= false;
-      await axios.post(`${this.id}/update`, updatedObject)
+      await axios.post(`${this.route}/update`, updatedObject)
           .then(response => console.log(response.data))
           .catch(error => console.log(error));
       await this.getDetailedObject();

@@ -32,26 +32,17 @@ public class MachineController : GenericController<Machine>
         if (saved == null) return NotFound("Machine not found");
         try
         {
-            if (updated.Name != "")
-            {
-                if (Validation.CheckString(updated.Name))
-                    saved.Name = updated.Name;
-                else throw new Exception("Provided name was invalid");
-            }
-
-            if (updated.Description != null)
-            {
-                if (Validation.CheckString(updated.Description))
-                    saved.Description = updated.Description;
-                else throw new Exception("Provided description was invalid");
-            }
+            if (saved.Name != updated.Name) saved.Name = updated.Name;
+          if (saved.Description != updated.Description) saved.Description = updated.Description;
+            
+            await _repo.Update(saved);
+            return Ok($"Updated object:\n{saved}");
         }
         catch (Exception e)
         {
             return BadRequest(e);
         }
 
-        await _repo.Update(saved);
-        return Ok($"Updated object:\n{saved}");
+
     }
 }

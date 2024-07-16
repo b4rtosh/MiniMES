@@ -34,7 +34,7 @@ export default{
       this.selectedObject.description = updatedObject.description;
       this.showForm= false;
       console.log(updatedObject);
-      await axios.post(`${this.route}/int/update`, updatedObject)
+      await axios.post(`${this.route}/update`, updatedObject)
           .then(response => response.data)
           .catch(error => console.log(error));
     }
