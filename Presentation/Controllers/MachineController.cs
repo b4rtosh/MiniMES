@@ -22,13 +22,11 @@ public class MachineController : GenericController<Machine>
         var all = await _mediator.Send(new GetAllMachinesQuery());
         return Ok(all);
     }
-    // public override async Task<IActionResult> GetOne([FromRoute] int id)
-    // {
-    //        var machine = await _repo.GetByIdWithIncludes(x => x.Id == id,
-    //             query => query
-    //                 .Include(m => m.Orders));
-    //     return Ok(machine);
-    // }
+    public override async Task<IActionResult> GetOne([FromRoute] int id)
+    {
+        var machine = await _mediator.Send(new GetDetailedMachinesQuery(id));
+        return Ok(machine);
+    }
 
     // public override async Task<IActionResult> UpdateOne([FromBody] Machine updated)
     // {
