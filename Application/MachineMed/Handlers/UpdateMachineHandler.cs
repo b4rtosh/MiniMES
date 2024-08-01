@@ -1,0 +1,35 @@
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using MiniMesTrainApi.Application.MachineMed.Commands;
+using MiniMesTrainApi.Domain.Entities;
+using MiniMesTrainApi.Infrastructure.Persistence.Repositories;
+
+namespace MiniMesTrainApi.Application.MachineMed.Handlers;
+
+public class UpdateMachineHandler : IRequestHandler<UpdateMachineCommand, IActionResult>
+{
+    private readonly DatabaseRepo<Machine> _repo;
+
+    public UpdateMachineHandler(DatabaseRepo<Machine> repo)
+    {
+        _repo = repo;
+    }
+
+    public async Task<IActionResult> Handle(UpdateMachineCommand request, CancellationToken cancellationToken)
+    {
+        var saved = await _repo.GetById(request.Updated.Id);
+        if (saved == null) return new NotFoundObjectResult("Machine not found");
+        try
+        {
+            if (saved.Name != request.Updated.Name) saved.Name = request.Updated.Name;
+            if (saved.Description != request.Updated.Description) saved.Description = request.Updated.Description;
+            
+            await _repo.Update(saved);
+            return new OkObjectResult($"Updated object:\n{saved}");
+        }
+        catch (Exception e)
+        {
+            return new BadRequestObjectResult(e);
+        }
+    }
+}

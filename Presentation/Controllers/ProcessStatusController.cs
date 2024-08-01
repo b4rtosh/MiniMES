@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using MiniMesTrainApi.Application.ProcessStatusMed.Queries;
 using MiniMesTrainApi.Domain.Entities;
 using MiniMesTrainApi.Infrastructure.Persistence.Repositories;
-using MiniMesTrainApi.Models;
 
 namespace MiniMesTrainApi.Presentation.Controllers;
 

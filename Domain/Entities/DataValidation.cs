@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace MiniMesTrainApi.Models;
+namespace MiniMesTrainApi.Domain.Entities;
 
 public static class Validation
 {

@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MiniMesTrainApi.Application.MachineMed.Commands;
 using MiniMesTrainApi.Application.MachineMed.Queries;
 using MiniMesTrainApi.Domain.Entities;
 using MiniMesTrainApi.Infrastructure.Persistence.Repositories;
@@ -28,23 +29,21 @@ public class MachineController : GenericController<Machine>
         return Ok(machine);
     }
 
-    // public override async Task<IActionResult> UpdateOne([FromBody] Machine updated)
-    // {
-    //     var saved = await _repo.GetById(updated.Id);
-    //     if (saved == null) return NotFound("Machine not found");
-    //     try
-    //     {
-    //         if (saved.Name != updated.Name) saved.Name = updated.Name;
-    //       if (saved.Description != updated.Description) saved.Description = updated.Description;
-    //         
-    //         await _repo.Update(saved);
-    //         return Ok($"Updated object:\n{saved}");
-    //     }
-    //     catch (Exception e)
-    //     {
-    //         return BadRequest(e);
-    //     }
-    //
-    //
-    // }
+    public override async Task<IActionResult> Add([FromBody] Machine instance)
+    {
+        var result = await _mediator.Send(new AddMachineCommand(instance));
+        return result;
+    }
+    
+    public override async Task<IActionResult> DeleteOne([FromRoute] int id)
+    {
+        var result = await _mediator.Send(new DeleteMachineCommand(id));
+        return result;
+    }
+    
+    public override async Task<IActionResult> UpdateOne([FromBody] Machine updated)
+    {
+        var result = await _mediator.Send(new UpdateMachineCommand(updated));
+        return result;
+    }
 }

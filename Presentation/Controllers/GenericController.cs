@@ -13,19 +13,13 @@ namespace MiniMesTrainApi.Presentation.Controllers
         {
             _mediator = mediator;
         }
-        // [HttpPut]
-        // [Route("add")]
-        // public async Task<IActionResult> Add ([FromBody] TEntity instance){
-        //     try
-        //     {
-        //         instance = await _repo.CreateNew(instance);
-        //         return Ok(instance);
-        //     }
-        //     catch (Exception ex)
-        //     {
-        //         return BadRequest(ex.Message);
-        //     }
-        // }
+        
+        [HttpPut]
+        [Route("add")]
+        public virtual async Task<IActionResult> Add ([FromBody] TEntity instance){
+                return BadRequest("Wrong request");
+        }
+        
         [HttpGet]
         [Route("all")]
         public virtual async Task<IActionResult> GetAll()
@@ -33,13 +27,12 @@ namespace MiniMesTrainApi.Presentation.Controllers
             return Ok();
         }
         
-        // [HttpDelete]
-        // [Route("delete/int/{id}")]
-        // public async Task<IActionResult> DeleteOne([FromRoute] int id)
-        // {
-        //     await _repo.DelById(id);
-        //     return Ok("Deleted instance");
-        // }
+        [HttpDelete]
+        [Route("delete/int/{id}")]
+        public virtual async Task<IActionResult> DeleteOne([FromRoute] int id)
+        {
+            return Ok("Wrong request");
+        }
         
         // [HttpDelete]
         // [Route("delete/long/{id}")]
@@ -56,22 +49,20 @@ namespace MiniMesTrainApi.Presentation.Controllers
             return Ok();
         }
         
-        // [HttpGet]
-        // [Route("long/{id}")]
-        // public virtual async Task<IActionResult> GetOne([FromRoute] long id)
-        // {
-        //     var instance = await _repo.GetById(id);
-        //     return Ok(instance);
-        // }
-        //
-        // [HttpPost]
-        // [Route("update")]
-        // public virtual async Task<IActionResult> UpdateOne([FromBody] TEntity updated)
-        // {
-        //
-        //    await _repo.Update(updated);
-        //     return Ok($"Updated object:\n{updated}");
-        // }
+        [HttpGet]
+        [Route("long/{id}")]
+        public virtual async Task<IActionResult> GetOne([FromRoute] long id)
+        {
+           return BadRequest("Wrong request.");
+        }
+        
+        [HttpPost]
+        [Route("update")]
+        public virtual async Task<IActionResult> UpdateOne([FromBody] TEntity updated)
+        {
+
+            return BadRequest("Wrong request.");
+        }
     }
 
 }

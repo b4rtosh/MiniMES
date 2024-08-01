@@ -1,5 +1,3 @@
-using MiniMesTrainApi.Models;
-
 namespace MiniMesTrainApi.Domain.Entities;
 
 public class Parameter
