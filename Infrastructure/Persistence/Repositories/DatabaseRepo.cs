@@ -87,11 +87,5 @@ namespace MiniMesTrainApi.Infrastructure.Persistence.Repositories
             _dbset.Update(entity);
             await _context.SaveChangesAsync();
         }
-
-        public List<int> GetAllIds()
-        {
-            // get only first column with Ids
-            return null;
-        }
     }
 }

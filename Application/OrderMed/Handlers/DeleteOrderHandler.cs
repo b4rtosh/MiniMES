@@ -1,21 +1,13 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using MiniMesTrainApi.Application.MachineMed.Commands;
 using MiniMesTrainApi.Application.OrderMed.Commands;
 using MiniMesTrainApi.Domain.Entities;
 using MiniMesTrainApi.Infrastructure.Persistence.Repositories;
 
 namespace MiniMesTrainApi.Application.OrderMed.Handlers;
 
-public class DeleteOrderHandler: IRequestHandler<DeleteOrderCommand, IActionResult>
+public class DeleteOrderHandler (DatabaseRepo<Order> _repo) : IRequestHandler<DeleteOrderCommand, IActionResult>
 {
-    private readonly DatabaseRepo<Machine> _repo;
-
-    public DeleteOrderHandler(DatabaseRepo<Machine> repo)
-    {
-        _repo = repo;
-    }
-
     public async Task<IActionResult> Handle(DeleteOrderCommand request, CancellationToken cancellationToken)
     {
         try

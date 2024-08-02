@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using MiniMesTrainApi.Application.MachineMed.Queries;
+using MiniMesTrainApi.Domain.Entities;
 using MiniMesTrainApi.Infrastructure.Persistence.Repositories;
 
 namespace MiniMesTrainApi.Presentation.Controllers
@@ -34,14 +35,13 @@ namespace MiniMesTrainApi.Presentation.Controllers
             return Ok("Wrong request");
         }
         
-        // [HttpDelete]
-        // [Route("delete/long/{id}")]
-        // public async Task<IActionResult> DeleteOne([FromRoute] long id)
-        // {
-        //     await _repo.DelById(id);
-        //     return Ok("Deleted instance");
-        // }
-        //
+        [HttpDelete]
+        [Route("delete/long/{id}")]
+        public virtual async Task<IActionResult> DeleteOne([FromRoute] long id)
+        {
+            return BadRequest("Wrong request");
+        }
+        
         [HttpGet]
         [Route("int/{id}")]
         public virtual async Task<IActionResult> GetOne([FromRoute] int id)

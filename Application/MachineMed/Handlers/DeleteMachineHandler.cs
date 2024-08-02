@@ -6,16 +6,9 @@ using MiniMesTrainApi.Infrastructure.Persistence.Repositories;
 
 namespace MiniMesTrainApi.Application.MachineMed.Handlers;
 
-public class DeleteMachineHandler : IRequestHandler<DeleteMachineCommand, IActionResult>
+public class DeleteMachineHandler (DatabaseRepo<Machine> _repo) : IRequestHandler<DeleteMachineCommand, IActionResult>
 {
-    private readonly DatabaseRepo<Machine> _repo;
-
-    public DeleteMachineHandler(DatabaseRepo<Machine> repo)
-    {
-        _repo = repo;
-    }
-
-    public async Task<IActionResult> Handle(DeleteMachineCommand request, CancellationToken cancellationToken)
+       public async Task<IActionResult> Handle(DeleteMachineCommand request, CancellationToken cancellationToken)
     {
         try
         {

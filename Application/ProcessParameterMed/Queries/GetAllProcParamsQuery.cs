@@ -4,6 +4,6 @@ using MiniMesTrainApi.Domain.Entities;
 
 namespace MiniMesTrainApi.Application.ProcessParameterMed.Queries;
 
-public class GetAllProcessParamsQuery : IRequest<IEnumerable<ProcessParameter>>
+public class GetAllProcParamsQuery : IRequest<IEnumerable<ProcessParameter>>
 {
 }

@@ -40,4 +40,10 @@ public class OrderController : GenericController<Order>
         var result = await _mediator.Send(new AddOrderCommand(instance));
         return result;
     }
+    
+    public override async Task<IActionResult> DeleteOne([FromRoute] long id)
+    {
+        var result = await _mediator.Send(new DeleteOrderCommand(id));
+        return result;
+    }
 }

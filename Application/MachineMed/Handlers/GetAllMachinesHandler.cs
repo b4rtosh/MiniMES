@@ -6,15 +6,8 @@ using MiniMesTrainApi.Infrastructure.Persistence.Repositories;
 
 namespace MiniMesTrainApi.Application.MachineMed.Handlers;
 
-public class GetAllMachinesHandler : IRequestHandler<GetAllMachinesQuery, IEnumerable<Machine>>
+public class GetAllMachinesHandler (DatabaseRepo<Machine> _repo) : IRequestHandler<GetAllMachinesQuery, IEnumerable<Machine>>
 {
-    private readonly DatabaseRepo<Machine> _repo;
-
-    public GetAllMachinesHandler(DatabaseRepo<Machine> repo)
-    {
-        _repo = repo;
-    }
-
     public async Task<IEnumerable<Machine>> Handle(GetAllMachinesQuery request, CancellationToken token)
     {
         return await _repo.GetAll();

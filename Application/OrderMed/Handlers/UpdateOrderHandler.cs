@@ -6,15 +6,8 @@ using MiniMesTrainApi.Infrastructure.Persistence.Repositories;
 
 namespace MiniMesTrainApi.Application.OrderMed.Handlers;
 
-public class UpdateOrderHandler : IRequestHandler<UpdateOrderCommand, IActionResult>
+public class UpdateOrderHandler (DatabaseRepo<Order> _repo) : IRequestHandler<UpdateOrderCommand, IActionResult>
 {
-    private readonly DatabaseRepo<Order> _repo;
-
-    public UpdateOrderHandler(DatabaseRepo<Order> repo)
-    {
-        _repo = repo;
-    }
-    
     public async Task<IActionResult> Handle(UpdateOrderCommand request, CancellationToken cancellationToken)
     {
         var saved = await _repo.GetById(request.Updated.Id);

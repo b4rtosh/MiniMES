@@ -28,9 +28,6 @@
         <Folder Include="Application\Abstractions\" />
         <Folder Include="Application\MachineMed\Commands\" />
         <Folder Include="Application\OrderMed\Commands\" />
-        <Folder Include="Application\ProcessParameterMed\Commands\" />
-        <Folder Include="Application\ProcessStatusMed\Commands\" />
-        <Folder Include="Application\ProcessMed\Commands\" />
         <Folder Include="Application\Product\Commands\" />
         <Folder Include="Data\" />
         <Folder Include="Infrastructure\" />

@@ -6,15 +6,8 @@ using MiniMesTrainApi.Infrastructure.Persistence.Repositories;
 
 namespace MiniMesTrainApi.Application.MachineMed.Handlers;
 
-public class UpdateMachineHandler : IRequestHandler<UpdateMachineCommand, IActionResult>
+public class UpdateMachineHandler (DatabaseRepo<Machine> _repo) : IRequestHandler<UpdateMachineCommand, IActionResult>
 {
-    private readonly DatabaseRepo<Machine> _repo;
-
-    public UpdateMachineHandler(DatabaseRepo<Machine> repo)
-    {
-        _repo = repo;
-    }
-
     public async Task<IActionResult> Handle(UpdateMachineCommand request, CancellationToken cancellationToken)
     {
         var saved = await _repo.GetById(request.Updated.Id);

@@ -9,14 +9,8 @@ using MiniMesTrainApi.Infrastructure.Persistence.Repositories;
 
 namespace MiniMesTrainApi.Application.MachineMed.Handlers;
 
-public class GetDetailedMachineHandler : IRequestHandler<GetDetailedMachinesQuery, Machine>
+public class GetDetailedMachineHandler (DatabaseRepo<Machine> _repo) : IRequestHandler<GetDetailedMachinesQuery, Machine>
 {
-    private readonly DatabaseRepo<Machine> _repo;
-    public GetDetailedMachineHandler(DatabaseRepo<Machine> repo)
-    {
-        _repo = repo;
-    }
-
     public async Task<Machine> Handle(GetDetailedMachinesQuery request, CancellationToken token)
     {
         var machine = await _repo.GetByIdWithIncludes(x => x.Id == request.Id,

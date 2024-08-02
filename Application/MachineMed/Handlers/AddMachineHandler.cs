@@ -7,15 +7,8 @@ using MiniMesTrainApi.Infrastructure.Persistence.Repositories;
 
 namespace MiniMesTrainApi.Application.MachineMed.Handlers;
 
-public class AddMachineHandler : IRequestHandler<AddMachineCommand, IActionResult>
-{
-    private readonly DatabaseRepo<Machine> _repo;
-
-    public AddMachineHandler(DatabaseRepo<Machine> repo)
-    {
-        _repo = repo;
-    }
-
+public class AddMachineHandler (DatabaseRepo<Machine> _repo) : IRequestHandler<AddMachineCommand, IActionResult>
+{ 
     public async Task<IActionResult> Handle(AddMachineCommand request, CancellationToken cancellationToken)
     {
         try

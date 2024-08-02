@@ -6,15 +6,8 @@ using MiniMesTrainApi.Infrastructure.Persistence.Repositories;
 
 namespace MiniMesTrainApi.Application.OrderMed.Handlers;
 
-public class AddOrderHandler : IRequestHandler<AddOrderCommand, IActionResult>
-{
-    private readonly DatabaseRepo<Order> _repo;
-    public AddOrderHandler(DatabaseRepo<Order> repo)
-    {
-        _repo = repo;
-    }
-
-    
+public class AddOrderHandler (DatabaseRepo<Order> _repo) : IRequestHandler<AddOrderCommand, IActionResult>
+{ 
     public async Task<IActionResult> Handle(AddOrderCommand request, CancellationToken cancellationToken)
     {
         try

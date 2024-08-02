@@ -28,15 +28,21 @@ public class ProductController : GenericController<Product>
         return Ok(product);
     }
 
-    public override async Task<IActionResult> Add([FromBody] Product instace)
+    public override async Task<IActionResult> Add([FromBody] Product instance)
     {
-        var result = await _mediator.Send(new AddProductCommand(instace));
+        var result = await _mediator.Send(new AddProductCommand(instance));
         return result;
     }   
     
     public override async Task<IActionResult> UpdateOne([FromBody] Product updated)
     {
         var result = await _mediator.Send(new UpdateProductCommand(updated));
+        return result;
+    }
+    
+    public override async Task<IActionResult> DeleteOne([FromRoute] int id)
+    {
+        var result = await _mediator.Send(new DeleteProductCommand(id));
         return result;
     }
 }

@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MiniMesTrainApi.Application.ProcessParameterMed.Commands;
 using MiniMesTrainApi.Application.ProcessParameterMed.Queries;
 using MiniMesTrainApi.Domain.Entities;
 using MiniMesTrainApi.Infrastructure.Persistence.Repositories;
@@ -18,34 +19,32 @@ public class ProcessParamController : GenericController<ProcessParameter>
 
     public override async Task<IActionResult> GetAll()
     {
-        var all = await _mediator.Send(new GetAllProcessParamsQuery());
+        var all = await _mediator.Send(new GetAllProcParamsQuery());
         return Ok(all);
     }
-    //
-    // public override async Task<IActionResult> GetOne([FromRoute] int id)
-    // {
-    //   var processParam = await _repo.GetByIdWithIncludes(x => x.Id == id,
-    //       query => query
-    //           .Include(x => x.Process)
-    //           .Include(x => x.Parameter));
-    //     return Ok(processParam);
-    // }
-    //
-    // public override async Task<IActionResult> UpdateOne([FromBody] ProcessParameter updated)
-    // {
-    //      var saved = await _repo.GetById(updated.Id);
-    //      if (saved == null) return BadRequest("Object not found");
-    //     try
-    //     {
-    //         if (updated.ProcessId != saved.ProcessId) saved.ProcessId = updated.ProcessId;
-    //         if (updated.ParameterId != saved.ParameterId) saved.ParameterId = updated.ParameterId;
-    //         if (updated.Value != saved.Value) saved.Value = updated.Value;
-    //     }
-    //     catch (Exception e)
-    //     {
-    //         return BadRequest(e.Message);
-    //     }
-    //     await _repo.Update(saved);
-    //     return Ok($"Updated object:\n{saved}");
-    // }
+    
+    public override async Task<IActionResult> GetOne([FromRoute] int id)
+    {
+        var product = await _mediator.Send(new GetDetailedProcParamQuery(id));
+        return Ok(product);
+    }
+    
+    public override async Task<IActionResult> Add([FromBody] ProcessParameter instance)
+    {
+        var result = await _mediator.Send(new AddProcParamCommand(instance));
+        return result;
+    }   
+    
+    public override async Task<IActionResult> UpdateOne([FromBody] ProcessParameter updated)
+    {
+        var result = await _mediator.Send(new UpdateProcParamCommand(updated));
+        return result;
+    }
+    
+    public override async Task<IActionResult> DeleteOne([FromRoute] int id)
+    {
+        var result = await _mediator.Send(new DeleteProcParamCommand(id));
+        return result;
+    }
+
 }

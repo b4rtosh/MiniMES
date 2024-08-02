@@ -7,14 +7,8 @@ using MiniMesTrainApi.Infrastructure.Persistence.Repositories;
 
 namespace MiniMesTrainApi.Application.OrderMed.Handlers;
 
-public class GetDetailedOrderHandler : IRequestHandler<GetDetailedOrderQuery, Order>
+public class GetDetailedOrderHandler (DatabaseRepo<Order> _repo) : IRequestHandler<GetDetailedOrderQuery, Order>
 {
-    private readonly DatabaseRepo<Order> _repo;
-    public GetDetailedOrderHandler(DatabaseRepo<Order> repo)
-    {
-        _repo = repo;
-    }
-    
     public async Task<Order> Handle(GetDetailedOrderQuery request, CancellationToken token)
     {
         var order =  await _repo.GetByIdWithIncludes(x => x.Id == request.Id,
