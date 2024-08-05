@@ -5,6 +5,7 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <StartupObject>MiniMesTrainApi.Presentation.Program</StartupObject>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <ItemGroup>
@@ -30,7 +31,6 @@
         <Folder Include="Application\OrderMed\Commands\" />
         <Folder Include="Application\Product\Commands\" />
         <Folder Include="Data\" />
-        <Folder Include="Infrastructure\" />
         <Folder Include="Models\" />
     </ItemGroup>
 
