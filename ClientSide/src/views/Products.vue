@@ -5,6 +5,7 @@ import ProductDetails from "@/components/ProductDetails.vue";
 import ProductForm from "@/components/ProductForm.vue";
 import '@/assets/all.css'
 import ProductUptForm from "@/components/ProductUptForm.vue";
+import {API_URL} from "@/main.js";
 
 export default {
   name: 'Products',
@@ -21,7 +22,7 @@ export default {
       showDetails: false,
       showUptForm: false,
       selectedObject: null,
-      route: 'http://localhost:23988/api/Product'
+      route: `${API_URL}/Product`
     }
   },
   created(){

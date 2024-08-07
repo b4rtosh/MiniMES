@@ -5,6 +5,7 @@ import MachineDetails from "@/components/MachineDetails.vue";
 import MachineForm from "@/components/MachineForm.vue";
 import '@/assets/all.css'
 import MachineUptForm from "@/components/MachineUptForm.vue";
+import {API_URL} from "@/main.js";
 
 export default {
   name: 'Machines',
@@ -21,7 +22,7 @@ export default {
       showDetails: false,
       showUptForm: false,
       selectedObject: null,
-      route: 'http://localhost:23988/api/Machine'
+      route: `${API_URL}/Machine`
     }
   },
   created(){

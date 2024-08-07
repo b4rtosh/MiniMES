@@ -19,7 +19,7 @@ export default {
       showDetails: false,
       showUptForm: false,
       selectedObject: null,
-      route: 'http://localhost:23988/api/Process'
+      route: `${API_URL}/Process`
     }
   },
   created() {

@@ -4,6 +4,7 @@ import OrderList from "@/components/OrderList.vue";
 import OrderDetails from "@/components/OrderDetails.vue";
 import OrderForm from "@/components/OrderForm.vue";
 import '@/assets/all.css'
+import {API_URL} from "@/main.js";
 
 export default {
   name: 'Orders',
@@ -19,7 +20,7 @@ export default {
       showDetails: false,
       showUptForm: false,
       selectedObject: null,
-      route: 'http://localhost:23988/api/Order'
+      route: `${API_URL}/Order`
     }
   },
   created(){

@@ -1,7 +1,10 @@
 <script>
 export default{
-  name: 'Home'
-};
+  name: 'Home',
+  created(){
+    console.log(import.meta.env.VITE_PORT);
+  }  
+}
 </script>
 
 <template>

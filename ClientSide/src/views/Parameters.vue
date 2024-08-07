@@ -4,6 +4,7 @@ import ParameterList from "@/components/ParameterList.vue";
 import ParameterDetails from "@/components/ParameterDetails.vue";
 import ParameterForm from "@/components/ParameterForm.vue";
 import '@/assets/all.css'
+import {API_URL} from "@/main.js";
 export default {
   name: 'Parameters',
   components: {
@@ -18,7 +19,7 @@ export default {
       showDetails: false,
       showUptForm: false,
       selectedObject: null,
-      route: 'http://localhost:23988/api/Param'
+      route: `${API_URL}/Param`
     }
   },
   created(){

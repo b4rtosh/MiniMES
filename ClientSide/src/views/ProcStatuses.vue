@@ -18,7 +18,7 @@ export default {
       showDetails: false,
       showUptForm: false,
       selectedObject: null,
-      route: 'http://localhost:23988/api/Status'
+      route: `${API_URL}/Status`
     }
   },
   created(){
