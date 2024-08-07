@@ -30,8 +30,26 @@
         <Folder Include="Application\MachineMed\Commands\" />
         <Folder Include="Application\OrderMed\Commands\" />
         <Folder Include="Application\Product\Commands\" />
-        <Folder Include="Data\" />
-        <Folder Include="Models\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="Data\**" />
+      <Compile Remove="Models\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="Data\**" />
+      <EmbeddedResource Remove="Models\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Remove="Data\**" />
+      <Content Remove="Models\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Data\**" />
+      <None Remove="Models\**" />
     </ItemGroup>
 
 </Project>
