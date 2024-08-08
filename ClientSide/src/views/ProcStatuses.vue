@@ -4,6 +4,8 @@ import ProcStatusList from "@/components/ProcStatusList.vue";
 import ProcStatusDetails from "@/components/ProcStatusDetails.vue";
 import ProcStatusForm from "@/components/ProcStatusForm.vue";
 import '@/assets/all.css'
+import {API_URL} from "@/main.js";
+
 export default {
   name: 'Statuses',
   components: {

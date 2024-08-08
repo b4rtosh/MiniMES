@@ -4,7 +4,7 @@ import ProcessList from "@/components/ProcessList.vue";
 import ProcessDetails from "@/components/ProcessDetails.vue";
 import ProcessForm from "@/components/ProcessForm.vue";
 import '@/assets/all.css'
-
+import {API_URL} from "@/main.js";
 export default {
   name: 'Processes',
   components: {

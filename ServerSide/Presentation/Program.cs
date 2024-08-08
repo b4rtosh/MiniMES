@@ -40,7 +40,7 @@ namespace MiniMesTrainApi.Presentation
             builder.Services.AddSwaggerGen();
         
         
-            var connString = builder.Configuration.GetConnectionString("MiniProduction");
+            var connString = builder.Configuration.GetConnectionString("DockerDB");
             if (connString == null)
             {
                 Console.WriteLine("There is no ConnectionString called MiniProduction in appsettings.json");
