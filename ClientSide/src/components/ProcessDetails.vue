@@ -25,7 +25,7 @@ export default{
       this.showForm = true;
     },
     async getDetailedObject() {
-      this.selectedObject = await axios.get(`${this.route}/int/${this.id}`)
+      this.selectedObject = await axios.get(`${this.route}/Process/int/${this.id}`)
           .then(response => response.data)
           .catch(error => console.log(error));
     },
@@ -34,7 +34,7 @@ export default{
       await this.getDetailedObject();
     },
     async deleteObject() {
-      await axios.delete(`${this.route}/delete/int/${this.selectedObject.id}`)
+      await axios.delete(`${this.route}/Process/delete/int/${this.selectedObject.id}`)
           .then(response => response.data)
           .catch(error => console.log('Error', error));
       this.$emit('delete');

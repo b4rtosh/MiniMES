@@ -19,7 +19,7 @@ export default {
       showDetails: false,
       showUptForm: false,
       selectedObject: null,
-      route: `${API_URL}/Process`
+      route: `${API_URL}`
     }
   },
   created() {
@@ -27,7 +27,7 @@ export default {
   },
   methods: {
     async getAllObjects() {
-      this.objects = await axios.get(`${this.route}/all`)
+      this.objects = await axios.get(`${this.route}/Process/all`)
           .then(response => response.data.$values)
           .catch(error => console.log(error));
     },

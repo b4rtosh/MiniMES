@@ -16,10 +16,13 @@ namespace MiniMesTrainApi.Presentation
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowSpecificOrigin",
-                    b => b.WithOrigins("http://localhost:5174")
+                    // b => b.WithOrigins("http://localhost:5174")
+                    //     .AllowAnyHeader()
+                    //     .AllowAnyMethod()
+                    //     .AllowAnyOrigin());
+                    b => b.AllowAnyOrigin()
                         .AllowAnyHeader()
-                        .AllowAnyMethod()
-                        .AllowAnyOrigin());
+                        .AllowAnyMethod());
             });
         
             // Add services to the container.
@@ -73,7 +76,6 @@ namespace MiniMesTrainApi.Presentation
 
         
             app.UseAuthorization();
-            app.UseCors();
      
             app.MapControllers();
         

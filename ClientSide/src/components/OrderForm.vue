@@ -3,6 +3,7 @@ import '@/assets/forms.css';
 import axios from "axios";
 export default{
   name: 'OrderForm',
+  props: ['route'],
   data(){
     return{
       localObject: {
@@ -24,12 +25,12 @@ export default{
       this.$emit('add-input', this.localObject);
     },
     async getAllMachines(){
-      this.machines = await axios.get('http://localhost:23988/api/Machine/all')
+      this.machines = await axios.get(`${this.route}/Machine/all`)
           .then(response => response.data.$values)
           .catch(error => console.log(error));
     },
     async getAllProducts(){
-      this.products = await axios.get('http://localhost:23988/api/Product/all')
+      this.products = await axios.get(`${this.route}/Product/all`)
           .then(response => response.data.$values)
           .catch(error => console.log(error));
     },

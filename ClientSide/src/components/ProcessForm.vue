@@ -30,24 +30,24 @@ export default {
       
     },
     async getAllOrders() {
-      this.orders = await axios.get('http://localhost:23988/api/Order/all')
+      this.orders = await axios.get(`${this.route}/Order/all`)
           .then(response => response.data.$values)
           .catch(error => console.log(error));
     },
     async getAllStatuses() {
-      this.statuses = await axios.get('http://localhost:23988/api/Status/all')
+      this.statuses = await axios.get(`${this.route}/Status/all`)
           .then(response => response.data.$values)
           .catch(error => console.log(error));
     },
     async getAllParameters() {
-      this.parameters = await axios.get('http://localhost:23988/api/Param/all')
+      this.parameters = await axios.get(`${this.route}/Param/all`)
           .then(response => response.data.$values)
           .catch(error => console.log(error));
     },
     async addObject(){
       try {
         console.log();
-        let response = await axios.put(`${this.route}/add`, this.localObject)
+        let response = await axios.put(`${this.route}/Process/add`, this.localObject)
             .then(x => x.data);
         const processId = response.id;
         if (!response.id) {throw new Error('Process ID not found');}
@@ -56,7 +56,7 @@ export default {
           this.addedParameters[i].processId = processId;
           console.log(`Sending PUT request to add process parameter ${i + 1}`, this.addedParameters[i]);
           try {
-            response = await axios.put('http://localhost:23988/api/ProcessParam/add', this.addedParameters[i]);
+            response = await axios.put(`${this.route}/ProcessParam/add`, this.addedParameters[i]);
           }catch (paramError){console.log(`Error adding parameter ${i + 1}`, paramError.response ? paramError.response.data : paramError.message)}
         }
         this.$emit('add-input');

@@ -4,6 +4,10 @@ import axios from "axios";
 export default{
   name: 'OrderUptForm',
   props: {
+    route: {
+      type: String,
+      default: '',
+    },
     machine: {
       type: Object,
       default: null,
@@ -26,13 +30,13 @@ export default{
       this.$emit('submitForm', this.localObject);
     },
     async getAllMachines(){
-      this.machines = await axios.get('http://localhost:23988/api/machine/all')
+      this.machines = await axios.get(`${this.route}/Machine/all`)
           .then(response => response.data.$values)
           .catch(error => console.log(error));
       console.log(this.machines);
     },
     async getAllProducts(){
-      this.products = await axios.get('http://localhost:23988/api/product/all')
+      this.products = await axios.get(`${this.route}/Product/all`)
           .then(response => response.data.$values)
           .catch(error => console.log(error));
       console.log(this.products);

@@ -10,7 +10,8 @@ export default {
       default: null,
     },
     route: {
-      type: String
+      type: String,
+      default: '',
     }
   },
   data() {
@@ -48,28 +49,28 @@ export default {
       }
     },
     async getAllOrders() {
-      this.orders = await axios.get('http://localhost:23988/api/Order/all')
+      this.orders = await axios.get(`${this.route}/Process/api/Order/all`)
           .then(response => response.data.$values)
           .catch(error => console.log(error));
     },
     async getAllStatuses() {
-      this.statuses = await axios.get('http://localhost:23988/api/Status/all')
+      this.statuses = await axios.get(`${this.route}/Process/api/Status/all`)
           .then(response => response.data.$values)
           .catch(error => console.log(error));
     },
     async getAllParameters() {
-      this.parameters = await axios.get('http://localhost:23988/api/Param/all')
+      this.parameters = await axios.get(`${this.route}/Process/api/Param/all`)
           .then(response => response.data.$values)
           .catch(error => console.log(error));
     },
     async updateObject() {
       console.log('Update');
       try {
-        let response = await axios.post(`${this.route}/update`, this.localObject);
+        let response = await axios.post(`${this.route}/Process/update`, this.localObject);
         for (let i = 0; i < this.addedParameters.length; i++) {
           console.log(this.addedParameters[i]);
           try {
-            response = await axios.post('http://localhost:23988/api/ProcessParam/update', this.addedParameters[i]);
+            response = await axios.post(`${this.route}/ProcessParam/update`, this.addedParameters[i]);
             console.log('Reponse', response.data);
           } catch (paramError) {
             console.log(`Error adding parameter ${i + 1}`, paramError.response ? paramError.response.data : paramError.message)

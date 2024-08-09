@@ -20,7 +20,7 @@ export default {
       showDetails: false,
       showUptForm: false,
       selectedObject: null,
-      route: `${API_URL}/Order`
+      route: `${API_URL}`
     }
   },
   created(){
@@ -28,13 +28,13 @@ export default {
   },
   methods: {
     async getAllObjects(){
-      this.objects = await axios.get(`${this.route}/all`)
+      this.objects = await axios.get(`${this.route}/Order/all`)
           .then(response => response.data.$values)
           .catch(error => console.log(error));
     },
     async addObject(newObject){
       try {
-        await axios.put(`${this.route}/add`, newObject)
+        await axios.put(`${this.route}/Order/add`, newObject)
         await this.getAllObjects();
         this.closeForm();
       } catch (error){
@@ -44,7 +44,7 @@ export default {
 
     async deleteObject(object){
       console.log(object);
-      await axios.delete(`${this.route}/delete/long/${object.id}`)
+      await axios.delete(`${this.route}/Order/delete/long/${object.id}`)
           .then(response => response.data)
           .catch(error => console.log('Error', error));
       this.closeForm();
@@ -83,6 +83,7 @@ export default {
   />
   <OrderForm
       v-if="showForm"
+      :route="route"
       @add-input="addObject"
       @cancel-form="closeForm"
   />

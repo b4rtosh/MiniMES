@@ -25,7 +25,7 @@ export default{
       this.showForm = true;
     },
     async getDetailedObject(){
-      this.selectedObject = await axios.get(`${this.route}/long/${this.id}`)
+      this.selectedObject = await axios.get(`${this.route}/Order/long/${this.id}`)
           .then(response => response.data)
           .catch(error => console.log(error));
       console.log(this.selectedObject);
@@ -36,7 +36,7 @@ export default{
       this.selectedObject.machineId = updatedObject.machineId;
       this.selectedObject.productId = updatedObject.productId;
       this.showForm= false;
-      await axios.post(`${this.route}/update`, updatedObject)
+      await axios.post(`${this.route}/Order/update`, updatedObject)
           .then(response => console.log(response.data))
           .catch(error => console.log(error));
       await this.getDetailedObject();
@@ -93,6 +93,7 @@ export default{
   <OrderUptForm
       v-if="showForm"
       :machine="selectedObject"
+      :route="route"
       @cancelForm="showForm = false"
       @submitForm="updateObject"
   />
