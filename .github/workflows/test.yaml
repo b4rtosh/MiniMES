@@ -1,6 +1,6 @@
 name: Test Github Actions
 on:
-  push:
+  pull:
     branches:
       - main
       
