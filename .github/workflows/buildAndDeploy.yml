@@ -33,9 +33,10 @@ jobs:
       
       - name: Pull Database Docker Image
         run: |
-          docker pull b4rtosh/minimes:server
+          docker pull b4rtosh/minimes:sql
           
       - name: Build Docker Images
+        working-directory: ./
         run: |
           docker-compose build
       
