@@ -24,24 +24,24 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y docker-compose
           
-#      - name: Build Server Docker Image
-#        working-directory: ./ServerSide
-#        run: |
-#          docker build -t b4rtosh/minimes:server .
-#          docker push b4rtosh/minimes:server
-#      
-#      - name: Build Front Docker Image
-#        working-directory: ./ClientSide
-#        run: |
-#          docker build -t b4rtosh/minimes:front .
-#          docker push b4rtosh/minimes:front
+      - name: Build Server Docker Image
+        working-directory: ./ServerSide
+        run: |
+          docker build -t b4rtosh/minimes:server .
+          docker push b4rtosh/minimes:server
+
+      - name: Build Front Docker Image
+        working-directory: ./ClientSide
+        run: |
+          docker build -t b4rtosh/minimes:front .
+          docker push b4rtosh/minimes:front
       
-#      - name: Pull Database Docker Image
-#        run: |
-#          docker pull b4rtosh/minimes:sql
+      - name: Pull Database Docker Image
+        run: |
+          docker pull b4rtosh/minimes:sql
           
-#      - name: Build Docker Images
-#        working-directory: ./
-#        run: |
-#          docker-compose build
+      - name: Build Docker Images
+        working-directory: ./
+        run: |
+          docker-compose build
       
