@@ -20,13 +20,15 @@ jobs:
           password: ${{ secrets.DOCKER_TOKEN }}
         
       - name: Build Server Docker Image
+        working-directory: ./ServerSide
         run: |
-          docker build -f ./ServerSide -t b4rtosh/minimes:server .
+          docker build -t b4rtosh/minimes:server .
           docker push b4rtosh/minimes:server
       
       - name: Build Front Docker Image
+        working-directory: ./ClientSide
         run: |
-          docker build -f ./ClientSide -t b4rtosh/minimes:front .
+          docker build -t b4rtosh/minimes:front .
           docker push b4rtosh/minimes:front
       
       - name: Pull Database Docker Image
