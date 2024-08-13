@@ -1,6 +1,6 @@
 name: Test Github Actions
 on:
-  pull:
+  pull_request:
     branches:
       - main
       

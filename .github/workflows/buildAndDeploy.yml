@@ -21,12 +21,12 @@ jobs:
         
       - name: Build Server Docker Image
         run: |
-          docker build -f ./ServerSide/Dockerfile -t b4rtosh/minimes:server .
+          docker build -f ./ServerSide -t b4rtosh/minimes:server .
           docker push b4rtosh/minimes:server
       
       - name: Build Front Docker Image
         run: |
-          docker build -f ./ClientSide/Dockerfile -t b4rtosh/minimes:front .
+          docker build -f ./ClientSide -t b4rtosh/minimes:front .
           docker push b4rtosh/minimes:front
       
       - name: Pull Database Docker Image
