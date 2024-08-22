@@ -34,12 +34,6 @@ resource "azurerm_app_service" "appservice" {
         app_command_line = "/bin/bash -c 'docker-compose up'"
 
         # Define the application settings to use a docker-compose file
-        app_settings = {
-            WEBSITES_ENABLE_APP_SERVICE_STORAGE = "false"
-            DOCKER_REGISTRY_SERVER_URL          = var.docker_registry_url
-            DOCKER_REGISTRY_SERVER_USERNAME     = var.docker_registry_username
-            DOCKER_REGISTRY_SERVER_PASSWORD     = var.docker_registry_password
-        }
     }
 }
 
