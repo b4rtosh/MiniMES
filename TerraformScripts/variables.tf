@@ -7,6 +7,13 @@ variable "rg-location"{
 }
 
 variable "client_id" {}
-variable "client_secret" {}
+variable "client_secret" {
+  sensitive = true
+}
 variable "tenant_id" {}
 variable "subscription_id" {}
+
+variable "dockerhub_username" {}
+variable "dockerhub_password" {
+  sensitive = true
+}

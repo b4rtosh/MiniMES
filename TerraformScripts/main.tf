@@ -20,6 +20,30 @@ resource "azurerm_app_service_plan" "appserviceplan" {
         size = "B1"
     }
 }
+# Create storage account for the docker compose file
+resource "azurerm_storage_account" "sa" {
+    name                     = "dockercomposesa"
+    resource_group_name      = azurerm_resource_group.rg.name
+    location                 = azurerm_resource_group.rg.location
+    account_tier             = "Standard"
+    account_replication_type = "LRS"
+}
+
+# Create a storage container to hold the Docker Compose file
+resource "azurerm_storage_container" "dockercompose" {
+    name                  = "docker-compose"
+    storage_account_name  = azurerm_storage_account.sa.name
+    container_access_type = "private"
+}
+
+# Upload Docker Compose file to the storage container
+resource "azurerm_storage_blob" "dockercomposeblob" {
+    name                   = "docker-compose.yaml"
+    storage_account_name   = azurerm_storage_account.sa.name
+    storage_container_name = azurerm_storage_container.dockercompose.name
+    type                   = "Block"
+    source                 = "./docker-compose.yaml"
+}
 
 resource "azurerm_app_service" "appservice" {
     name = "${azurerm_resource_group.rg.name}-app"
@@ -28,12 +52,14 @@ resource "azurerm_app_service" "appservice" {
     app_service_plan_id = azurerm_app_service_plan.appserviceplan.id
 
     site_config {
-        linux_fx_version = "DOCKER|nginx:latest"
+        linux_fx_version = "COMPOSE|${azurerm_storage_blob.dockercomposeblob.url}"
+    }
 
-        # Configuration for multi-container
-        app_command_line = "/bin/bash -c 'docker-compose up'"
-
-        # Define the application settings to use a docker-compose file
+    app_settings = {
+        WEBSITES_ENABLE_APP_SERVICE_STORAGE = "false"
+        DOCKER_REGISTRY_SERVER_URL          = "https://index.docker.io/v1/"
+        DOCKER_REGISTRY_SERVER_USERNAME     = var.dockerhub_username
+        DOCKER_REGISTRY_SERVER_PASSWORD     = var.dockerhub_password
     }
 }
 
