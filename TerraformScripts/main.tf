@@ -42,7 +42,7 @@ resource "azurerm_storage_blob" "dockercomposeblob" {
     storage_account_name   = azurerm_storage_account.sa.name
     storage_container_name = azurerm_storage_container.dockercompose.name
     type                   = "Block"
-    source                 = "${path.module}/docker-compose.yaml"
+    source                 = "${path.module}/docker-compose.yml"
 }
 
 resource "azurerm_app_service" "appservice" {
