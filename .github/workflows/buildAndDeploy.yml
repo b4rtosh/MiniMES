@@ -68,9 +68,6 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
         
-      - name: Deploy to Azure Container Instances
+      - name: Deploy to Azure App Service
         run: terraform apply -auto-approve tfplan
-        env:
-          TF_VAR_docker_registry_username: ${{ secrets.DOCKER_USERNAME }}
-          TF_VAR_docker_registry_password: ${{ secrets.DOCKER_TOKEN }}
-          TF_VAR_docker_registry_url: ${{ secrets.DOCKER_REGISTRY_URL }}
+
