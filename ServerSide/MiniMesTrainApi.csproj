@@ -31,6 +31,7 @@
         <Folder Include="Application\MachineMed\Commands\" />
         <Folder Include="Application\OrderMed\Commands\" />
         <Folder Include="Application\Product\Commands\" />
+        <Folder Include="Infrastructure\Environments\" />
         <Folder Include="Presentation\Controllers\" />
         <Folder Include="Properties\" />
     </ItemGroup>

@@ -4,8 +4,9 @@ on:
     branches:
       - main
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -40,8 +41,36 @@ jobs:
         run: |
           docker pull b4rtosh/minimes:sql
           
-      - name: Build Docker Images
-        working-directory: ./
-        run: |
-          docker-compose build
+  deploy:
+    defaults:
+      run:
+        working-directory: ./TerraformScripts
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
       
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+        
+      - name: Init Terraform
+        run: terraform init
+        
+      - name: Validate Terraform
+        run: terraform validate
+        
+      - name: Plan terraform
+        run: terraform plan -out=tfplan
+        
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+        
+      - name: Deploy to Azure Container Instances
+        run: terraform apply -auto-approve tfplan
+        env:
+          TF_VAR_docker_registry_username: ${{ secrets.DOCKER_USERNAME }}
+          TF_VAR_docker_registry_password: ${{ secrets.DOCKER_TOKEN }}
+          TF_VAR_docker_registry_url: ${{ secrets.DOCKER_REGISTRY_URL }}

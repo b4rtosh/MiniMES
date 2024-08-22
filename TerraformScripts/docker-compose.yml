@@ -1,7 +1,7 @@
 version: '3'
 services:
   ms-sql-server:
-    image: b4rtosh/minimes:sql
+    image: docker.io/b4rtosh/minimes:sql
     container_name: sql-server
     environment:
       SA_PASSWORD: "zaq1@WSX"
@@ -9,12 +9,12 @@ services:
     ports:
       - "1433:1433"
   server: 
-    image: b4rtosh/minimes:server
+    image: docker.io/b4rtosh/minimes:server
     container_name: minimes-server
     ports:
       - "5001:5001"
   front:
-    image: b4rtosh/minimes:front
+    image: docker.io/b4rtosh/minimes:front
     container_name: minimes-front
     ports:
       - "5174:5174"
