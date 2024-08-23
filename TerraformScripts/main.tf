@@ -38,7 +38,7 @@ resource "azurerm_storage_container" "dockercompose" {
 
 # Upload Docker Compose file to the storage container
 resource "azurerm_storage_blob" "dockercomposeblob" {
-    name                   = "docker-compose.yaml"
+    name                   = "docker-compose.yml"
     storage_account_name   = azurerm_storage_account.sa.name
     storage_container_name = azurerm_storage_container.dockercompose.name
     type                   = "Block"
