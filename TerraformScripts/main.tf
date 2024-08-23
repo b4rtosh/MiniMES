@@ -22,7 +22,7 @@ resource "azurerm_app_service_plan" "appserviceplan" {
 }
 # Create storage account for the docker compose file
 resource "azurerm_storage_account" "sa" {
-    name                     = "dockerstorageacc"
+    name                     = "dockercomposestorage001"
     resource_group_name      = azurerm_resource_group.rg.name
     location                 = azurerm_resource_group.rg.location
     account_tier             = "Standard"
