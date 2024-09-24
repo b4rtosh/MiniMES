@@ -15,6 +15,6 @@ RUN npm run build
 # nginx to serve static files
 FROM nginx:stable-alpine as production-stage
 COPY --from=build-stage /app/dist/ /usr/share/nginx/html
-EXPOSE 5174
+EXPOSE 80
 # start nginx
 CMD ["nginx", "-g", "daemon off;"]
